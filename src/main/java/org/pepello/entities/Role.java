@@ -1,15 +1,14 @@
 package org.pepello.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.pepello.entities.baseClasses.CreatedEntity;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter

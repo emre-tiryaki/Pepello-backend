@@ -3,8 +3,6 @@ package org.pepello.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.pepello.entities.baseClasses.UpdatedEntity;
 
 @Getter

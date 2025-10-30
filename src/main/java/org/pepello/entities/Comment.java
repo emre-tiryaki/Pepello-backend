@@ -5,13 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.pepello.entities.baseClasses.UpdatedEntity;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
