@@ -1,6 +1,8 @@
 package org.pepello.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -8,6 +10,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.pepello.entities.baseClasses.UpdatedEntity;
 
+import javax.crypto.Mac;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -24,11 +27,14 @@ public class Team extends UpdatedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "icon_id", nullable = false)
-    private Media iconId;
+    private Media icon;
 
+    @NotNull(message = "team name cannot be null")
+    @NotBlank(message = "team name cannot be blank")
     @Column(name = "team_name", nullable = false, length = Integer.MAX_VALUE)
     private String teamName;
 
+    @NotBlank(message = "team description cannot be blank")
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 

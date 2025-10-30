@@ -1,6 +1,8 @@
 package org.pepello.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -25,6 +27,8 @@ public class Comment extends UpdatedEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @NotNull(message = "comment cannot be null")
+    @NotBlank(message = "comment should have a text")
     @Column(name = "text", nullable = false, length = Integer.MAX_VALUE)
     private String text;
 

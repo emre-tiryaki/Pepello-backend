@@ -1,6 +1,8 @@
 package org.pepello.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -30,9 +32,12 @@ public class Task extends UpdatedEntity {
     @JoinColumn(name = "media_id", nullable = false)
     private Media media;
 
+    @NotNull(message = "tasks should have a title")
+    @NotBlank(message = "task title cannot be null")
     @Column(name = "task_title", nullable = false, length = Integer.MAX_VALUE)
     private String taskTitle;
 
+    @NotBlank(message = "task title cannot be blank")
     @Column(name = "task_description", length = Integer.MAX_VALUE)
     private String taskDescription;
 

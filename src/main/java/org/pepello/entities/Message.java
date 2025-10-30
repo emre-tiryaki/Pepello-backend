@@ -1,6 +1,7 @@
 package org.pepello.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -25,10 +26,10 @@ public class Message extends UpdatedEntity {
     @JoinColumn(name = "chat_id", nullable = false)
     private Chat chat;
 
-    @Column(name = "text", length = Integer.MAX_VALUE)
+    @Column(name = "text")
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "media_id", nullable = false)
+    @JoinColumn(name = "media_id")
     private Media mediaId;
 }
