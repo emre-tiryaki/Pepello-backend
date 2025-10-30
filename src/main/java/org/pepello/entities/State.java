@@ -23,7 +23,7 @@ public class State extends UpdatedEntity {
 
     @NotNull(message = "state name cannot be null")
     @NotBlank(message = "state name cannot be blank")
-    @Column(name = "state_name", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "state_name", nullable = false)
     private String stateName;
 
     @ManyToOne(fetch = FetchType.LAZY)

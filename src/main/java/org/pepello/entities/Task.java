@@ -34,11 +34,11 @@ public class Task extends UpdatedEntity {
 
     @NotNull(message = "tasks should have a title")
     @NotBlank(message = "task title cannot be null")
-    @Column(name = "task_title", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "task_title", nullable = false)
     private String taskTitle;
 
     @NotBlank(message = "task title cannot be blank")
-    @Column(name = "task_description", length = Integer.MAX_VALUE)
+    @Column(name = "task_description")
     private String taskDescription;
 
     @ColumnDefault("false")

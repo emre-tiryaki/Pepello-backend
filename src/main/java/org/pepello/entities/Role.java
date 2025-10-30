@@ -20,11 +20,11 @@ public class Role extends CreatedEntity {
 
     @NotNull(message = "roles should have a name")
     @NotBlank(message = "roles should have a valid name")
-    @Column(name = "role_name", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "role_name", nullable = false)
     private String roleName;
 
     @NotBlank(message = "role description cannot be blank")
-    @Column(name = "role_description", length = Integer.MAX_VALUE)
+    @Column(name = "role_description")
     private String roleDescription;
 
 }

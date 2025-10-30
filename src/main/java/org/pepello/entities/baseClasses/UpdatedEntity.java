@@ -9,7 +9,7 @@ import java.time.OffsetDateTime;
 
 @MappedSuperclass
 @Data
-public class UpdatedEntity extends CreatedEntity{
+public abstract class UpdatedEntity extends CreatedEntity{
     @UpdateTimestamp
     @Column(name = "updated_at")
     private OffsetDateTime updatedAt;

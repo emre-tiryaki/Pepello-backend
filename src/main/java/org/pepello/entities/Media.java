@@ -29,6 +29,6 @@ public class Media extends CreatedEntity {
 
     @NotNull(message = "media should have a URL")
     @NotBlank(message = "media should have a URL")
-    @Column(name = "media_url", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "media_url", nullable = false)
     private String mediaUrl;
 }

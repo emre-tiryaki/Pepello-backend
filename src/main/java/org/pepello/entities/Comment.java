@@ -29,7 +29,7 @@ public class Comment extends UpdatedEntity {
 
     @NotNull(message = "comment cannot be null")
     @NotBlank(message = "comment should have a text")
-    @Column(name = "text", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "text", nullable = false)
     private String text;
 
 }

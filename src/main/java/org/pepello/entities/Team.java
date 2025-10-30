@@ -31,11 +31,11 @@ public class Team extends UpdatedEntity {
 
     @NotNull(message = "team name cannot be null")
     @NotBlank(message = "team name cannot be blank")
-    @Column(name = "team_name", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "team_name", nullable = false)
     private String teamName;
 
     @NotBlank(message = "team description cannot be blank")
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Column(name = "description")
     private String description;
 
 }

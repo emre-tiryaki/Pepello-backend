@@ -23,16 +23,16 @@ public class Project extends UpdatedEntity {
 
     @NotNull(message = "project should have a name")
     @NotBlank(message = "project should have a valid name")
-    @Column(name = "project_name", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "project_name", nullable = false)
     private String projectName;
 
     @NotBlank(message = "project description cannot be blank")
-    @Column(name = "project_description", length = Integer.MAX_VALUE)
+    @Column(name = "project_description")
     private String projectDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "icon_id", nullable = false)
-    private Media iconId;
+    private Media icon;
 
     @Column(name = "start_date")
     private LocalDate startDate;
