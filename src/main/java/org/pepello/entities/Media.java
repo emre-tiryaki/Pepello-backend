@@ -18,10 +18,10 @@ import java.math.BigDecimal;
 public class Media extends CreatedEntity {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "media_type", columnDefinition = "text", nullable = false)
+    @Column(name = "media_type", nullable = false)
     private MediaType mediaType;
 
-    @Column(name = "media_size", nullable = false, precision = 10, scale = 2)
+    @Column(name = "media_size", nullable = false)
     private BigDecimal mediaSize;
 
     @NotNull(message = "media should have a URL")

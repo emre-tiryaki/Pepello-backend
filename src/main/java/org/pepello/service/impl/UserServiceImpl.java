@@ -49,6 +49,10 @@ public class UserServiceImpl implements IUserService {
         if (createDto.email() == null || createDto.password() == null || createDto.firstName() == null || createDto.lastName() == null)
             return null;
 
+        //TODO: hata fırlat
+        if(userRepository.existsByEmail(createDto.email()))
+            return null;
+
         User newUser = new User();
         newUser.setFirstName(createDto.firstName());
         newUser.setLastName(createDto.lastName());
@@ -57,10 +61,12 @@ public class UserServiceImpl implements IUserService {
         newUser.setBirthday(createDto.birthday());
 
         Media profilePic = new Media();
-        profilePic.setMediaUrl(createDto.profilePicUrl());
+
+        profilePic.setMediaUrl(createDto.profilePicUrl() != null ? createDto.profilePicUrl() : "https://thumbs.dreamstime.com/b/default-avatar-profile-trendy-style-social-media-user-icon-187599373.jpg");
+        profilePic.setMediaType(MediaType.image);
         //TODO: burası 0 olmicak
         profilePic.setMediaSize(BigDecimal.ZERO);
-        profilePic.setMediaType(MediaType.image);
+        mediaRepository.save(profilePic);
 
         newUser.setProfilePic(profilePic);
 

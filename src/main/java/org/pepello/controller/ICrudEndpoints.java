@@ -16,20 +16,20 @@ import java.util.UUID;
 public interface ICrudEndpoints<T, C, U> {
     //tüm veritabanını çekmek
     @GetMapping("/list")
-    ResponseEntity<List<T>> getAll();
+    List<T> getAll();
 
     //id'ye göre veritabanından eleman çekmek
     @GetMapping("/{id}")
-    ResponseEntity<T> getById(@PathVariable(name = "id") UUID id);
+    T getById(@PathVariable(name = "id") UUID id);
 
     //veritabanına eleman eklemek
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<T> create(@RequestBody C createDto);
+    T create(@RequestBody C createDto);
 
     //veritabanındaki elemanı güncellemek
     @PatchMapping("/{id}")
-    ResponseEntity<T> update(
+    T update(
             @PathVariable(name = "id") UUID id,
             @RequestBody U updateDto
     );
@@ -37,5 +37,5 @@ public interface ICrudEndpoints<T, C, U> {
     //veritabanından eleman silmek
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    ResponseEntity<Void> delete(@PathVariable(name = "id") UUID id);
+    void delete(@PathVariable(name = "id") UUID id);
 }

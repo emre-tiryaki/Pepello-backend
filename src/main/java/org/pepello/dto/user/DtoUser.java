@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public record DtoUser(
         UUID userId,
-        DtoMedia profilePic,
         String firstName,
         String lastName,
         String email,
+        DtoMedia profilePic,
         LocalDate birthday
 ) {
 }
