@@ -6,7 +6,7 @@ import org.pepello.entities.enums.Color;
 import java.util.UUID;
 
 public record DtoState(
-        UUID stateId,
+        UUID id,
         String stateName,
         DtoMedia icon,
         Color stateColor

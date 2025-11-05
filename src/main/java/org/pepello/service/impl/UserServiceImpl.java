@@ -50,7 +50,7 @@ public class UserServiceImpl implements IUserService {
             return null;
 
         //TODO: hata fırlat
-        if(userRepository.existsByEmail(createDto.email()))
+        if (userRepository.existsByEmail(createDto.email()))
             return null;
 
         User newUser = new User();
@@ -62,6 +62,7 @@ public class UserServiceImpl implements IUserService {
 
         Media profilePic = new Media();
 
+        //TODO: media servisi yapınca burayı düzelt
         profilePic.setMediaUrl(createDto.profilePicUrl() != null ? createDto.profilePicUrl() : "https://thumbs.dreamstime.com/b/default-avatar-profile-trendy-style-social-media-user-icon-187599373.jpg");
         profilePic.setMediaType(MediaType.image);
         //TODO: burası 0 olmicak
@@ -79,14 +80,14 @@ public class UserServiceImpl implements IUserService {
             return null;
 
         //TODO: hatayı düzelt buradaki
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User existingUser = getById(id);
 
         if (updateDto.firstName() != null) existingUser.setFirstName(updateDto.firstName());
         if (updateDto.lastName() != null) existingUser.setLastName(updateDto.lastName());
         if (updateDto.email() != null) existingUser.setEmail(updateDto.email());
         if (updateDto.password() != null) existingUser.setPassword(updateDto.password());
         if (updateDto.profilePicUrl() != null) {
+            //TODO: Media servisini implemente et
             Media profilePic = existingUser.getProfilePic();
 
             profilePic.setMediaUrl(updateDto.profilePicUrl());
@@ -107,7 +108,7 @@ public class UserServiceImpl implements IUserService {
             return;
 
         //TODO: buradaki hata fırlatsın
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("kullanıcı bulunamadı"));
+        User existingUser = getById(id);
 
         userRepository.delete(existingUser);
     }

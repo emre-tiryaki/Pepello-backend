@@ -56,9 +56,7 @@ public class RoleServiceImpl implements IRoleService {
         if (updateDto.name() != null && roleRepository.existsByRoleName(updateDto.name()))
             return null;
 
-        //TODO: lütfen doğru hata fırlat
-        Role existingRole = roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("aaa"));
+        Role existingRole = getById(id);
 
         if (updateDto.name() != null) existingRole.setRoleName(updateDto.name());
         if (updateDto.description() != null) existingRole.setRoleDescription(updateDto.description());
@@ -72,9 +70,7 @@ public class RoleServiceImpl implements IRoleService {
         if (id == null)
             return;
 
-        //TODO: hata fırlat!!!!!
-        Role existingRole = roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("aaa"));
+        Role existingRole = getById(id);
 
         roleRepository.delete(existingRole);
     }

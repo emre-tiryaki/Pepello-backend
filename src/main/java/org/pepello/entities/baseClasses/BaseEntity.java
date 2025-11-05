@@ -2,7 +2,6 @@ package org.pepello.entities.baseClasses;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 

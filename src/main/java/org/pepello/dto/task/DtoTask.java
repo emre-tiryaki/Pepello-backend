@@ -7,7 +7,7 @@ import org.pepello.dto.state.DtoState;
 import java.util.UUID;
 
 public record DtoTask(
-        UUID task,
+        UUID id,
         DtoProject project,
         DtoState state,
         DtoMedia media,

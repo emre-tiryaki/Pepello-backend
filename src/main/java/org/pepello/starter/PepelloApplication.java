@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 public class PepelloApplication {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(PepelloApplication.class, args);
     }
 

@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record DtoMedia(
-        UUID mediaId,
+        UUID id,
         MediaType mediaType,
         BigDecimal mediaSize,
         String mediaUrl

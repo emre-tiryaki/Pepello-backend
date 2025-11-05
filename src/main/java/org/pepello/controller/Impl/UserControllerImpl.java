@@ -7,7 +7,6 @@ import org.pepello.dto.user.UserUpdateRequest;
 import org.pepello.mappers.UserMapper;
 import org.pepello.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +24,8 @@ public class UserControllerImpl implements IUserController {
     @Override
     public List<DtoUser> getAll() {
         return userService.getAll().stream()
-                        .map(userMapper::toDto)
-                        .toList();
+                .map(userMapper::toDto)
+                .toList();
     }
 
     @Override

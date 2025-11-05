@@ -5,7 +5,7 @@ import org.pepello.dto.team.DtoTeam;
 import java.util.UUID;
 
 public record DtoChat(
-        UUID chatId,
+        UUID id,
         DtoTeam team
 ) {
 }

@@ -7,7 +7,7 @@ import org.pepello.dto.user.DtoUser;
 import java.util.UUID;
 
 public record DtoMessage(
-        UUID messageId,
+        UUID id,
         DtoUser user,
         DtoChat chat,
         String text,

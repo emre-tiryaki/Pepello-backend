@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record DtoUser(
-        UUID userId,
+        UUID id,
         String firstName,
         String lastName,
         String email,

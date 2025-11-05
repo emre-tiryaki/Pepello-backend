@@ -6,7 +6,7 @@ import org.pepello.dto.user.DtoUser;
 import java.util.UUID;
 
 public record DtoComment(
-        UUID commentId,
+        UUID id,
         DtoTask task,
         DtoUser user,
         String text

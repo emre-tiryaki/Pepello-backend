@@ -6,7 +6,7 @@ import org.pepello.dto.user.DtoUser;
 import java.util.UUID;
 
 public record DtoTeam(
-        UUID teamId,
+        UUID id,
         DtoUser owner,
         DtoMedia icon,
         String teamName,

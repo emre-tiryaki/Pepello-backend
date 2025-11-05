@@ -6,7 +6,6 @@ import org.pepello.dto.role.RoleCreateRequest;
 import org.pepello.dto.role.RoleUpdateRequest;
 import org.pepello.mappers.RoleMapper;
 import org.pepello.service.IRoleService;
-import org.pepello.service.impl.RoleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +23,9 @@ public class RoleControllerImpl implements IRoleController {
 
     @Override
     public List<DtoRole> getAll() {
-        return roleService.getAll().stream().map(roleMapper::toDto).toList();
+        return roleService.getAll().stream()
+                .map(roleMapper::toDto)
+                .toList();
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record DtoProject(
-        UUID projectId,
+        UUID id,
         String projectName,
         String projectDescription,
         DtoMedia icon,
