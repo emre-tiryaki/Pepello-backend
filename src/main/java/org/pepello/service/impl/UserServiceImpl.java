@@ -59,17 +59,8 @@ public class UserServiceImpl implements IUserService {
         newUser.setEmail(createDto.email());
         newUser.setPassword(passwordService.hash(createDto.password()));
         newUser.setBirthday(createDto.birthday());
-
-        Media profilePic = new Media();
-
-        //TODO: media servisi yapınca burayı düzelt
-        profilePic.setMediaUrl(createDto.profilePicUrl() != null ? createDto.profilePicUrl() : "https://thumbs.dreamstime.com/b/default-avatar-profile-trendy-style-social-media-user-icon-187599373.jpg");
-        profilePic.setMediaType(MediaType.image);
-        //TODO: burası 0 olmicak
-        profilePic.setMediaSize(BigDecimal.ZERO);
-        mediaRepository.save(profilePic);
-
-        newUser.setProfilePic(profilePic);
+        //TODO: buraya mantık ekle
+        newUser.setProfilePic(null);
 
         return userRepository.save(newUser);
     }
