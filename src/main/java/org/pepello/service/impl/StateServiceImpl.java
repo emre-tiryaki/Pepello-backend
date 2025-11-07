@@ -37,12 +37,12 @@ public class StateServiceImpl implements IStateService {
         if (createDto == null)
             return null;
 
-        State newState = new State();
-
-        newState.setStateName(createDto.stateName());
-        newState.setStateColor(createDto.stateColor());
-        //TODO: buraya mantık ekle
-        newState.setIcon(null);
+        State newState = State.builder()
+                .stateName(createDto.stateName())
+                .stateColor(createDto.stateColor())
+                //TODO: buraya mantık ekle
+                .icon(null)
+                .build();
 
         return stateRepository.save(newState);
     }

@@ -45,15 +45,11 @@ public class CommentServiceImpl implements ICommentService {
         if (createDto == null)
             return null;
 
-        Comment newComment = new Comment();
-
-        Task existingTask = taskService.getById(createDto.taskId());
-        newComment.setTask(existingTask);
-
-        User existingUser = userService.getById(createDto.userId());
-        newComment.setUser(existingUser);
-
-        newComment.setText(createDto.text());
+        Comment newComment = Comment.builder()
+                .task(taskService.getById(createDto.taskId()))
+                .user(userService.getById(createDto.userId()))
+                .text(createDto.text())
+                .build();
 
         return commentRepository.save(newComment);
     }

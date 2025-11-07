@@ -38,11 +38,11 @@ public class MediaServiceImpl implements IMediaService {
         if (createDto == null)
             return null;
 
-        Media newMedia = new Media();
-
-        newMedia.setMediaUrl(createDto.mediaUrl());
-        newMedia.setMediaType(createDto.mediaType());
-        newMedia.setMediaSize(createDto.mediaSize());
+        Media newMedia = Media.builder()
+                .mediaUrl(createDto.mediaUrl())
+                .mediaType(createDto.mediaType())
+                .mediaSize(createDto.mediaSize())
+                .build();
 
         return mediaRepository.save(newMedia);
     }

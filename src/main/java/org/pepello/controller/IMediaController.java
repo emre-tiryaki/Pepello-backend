@@ -1,5 +1,6 @@
 package org.pepello.controller;
 
+import org.pepello.common.controller.ICrudEndpoints;
 import org.pepello.dto.media.DtoMedia;
 import org.pepello.dto.media.MediaCreateRequest;
 import org.pepello.dto.media.MediaUpdateRequest;

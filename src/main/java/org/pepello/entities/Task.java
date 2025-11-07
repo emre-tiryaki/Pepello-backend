@@ -3,16 +3,18 @@ package org.pepello.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.pepello.entities.baseClasses.UpdatedEntity;
+import org.pepello.common.baseEntities.UpdatedEntity;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "tasks")
 @AttributeOverride(name = "id", column = @Column(name = "task_id", nullable = false, updatable = false))
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Task extends UpdatedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

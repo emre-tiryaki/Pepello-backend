@@ -42,12 +42,11 @@ public class ChatServiceImpl implements IChatService {
         if (createDto == null)
             return null;
 
-        Chat newChat = new Chat();
-
-        Team existingTeam = teamService.getById(createDto.teamId());
-        newChat.setTeam(existingTeam);
-        newChat.setName(createDto.chatName());
-        newChat.setDescription(createDto.description());
+        Chat newChat = Chat.builder()
+                .team(teamService.getById(createDto.teamId()))
+                .name(createDto.chatName())
+                .description(createDto.description())
+                .build();
 
         return chatRepository.save(newChat);
     }

@@ -34,14 +34,14 @@ public class ProjectServiceImpl implements IProjectService {
         if (createDto == null)
             return null;
 
-        Project newProject = new Project();
-
-        newProject.setProjectName(createDto.projectName());
-        newProject.setProjectDescription(createDto.projectDescription());
-        //TODO: buraya mantık ekle
-        newProject.setIcon(null);
-        newProject.setStartDate(createDto.startDate());
-        newProject.setEndDate(createDto.endDate());
+        Project newProject = Project.builder()
+                .projectName(createDto.projectName())
+                .projectDescription(createDto.projectDescription())
+                //TODO: buraya mantık ekle
+                .icon(null)
+                .startDate(createDto.startDate())
+                .endDate(createDto.endDate())
+                .build();
 
         return projectRepository.save(newProject);
     }

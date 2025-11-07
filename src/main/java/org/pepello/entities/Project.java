@@ -3,9 +3,8 @@ package org.pepello.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.pepello.entities.baseClasses.UpdatedEntity;
+import lombok.*;
+import org.pepello.common.baseEntities.UpdatedEntity;
 
 import java.time.LocalDate;
 
@@ -14,6 +13,9 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "projects")
 @AttributeOverride(name = "id", column = @Column(name = "project_id", nullable = false, updatable = false))
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Project extends UpdatedEntity {
 
     @NotNull(message = "project should have a name")

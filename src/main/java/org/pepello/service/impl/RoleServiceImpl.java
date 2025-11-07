@@ -25,7 +25,7 @@ public class RoleServiceImpl implements IRoleService {
     public Role getById(UUID id) {
         //TODO: hata mimarisini yap
         return roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("aaaaa"));
+                .orElseThrow(null);
     }
 
     @Override
@@ -38,10 +38,10 @@ public class RoleServiceImpl implements IRoleService {
         if (roleRepository.existsByRoleName(createDto.name()))
             return null;
 
-        Role newRole = new Role();
-
-        newRole.setRoleName(createDto.name());
-        newRole.setRoleDescription(createDto.description());
+        Role newRole = Role.builder()
+                .roleName(createDto.name())
+                .roleDescription(createDto.description())
+                .build();
 
         return roleRepository.save(newRole);
     }

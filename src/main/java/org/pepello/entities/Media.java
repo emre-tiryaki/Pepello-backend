@@ -3,9 +3,8 @@ package org.pepello.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.pepello.entities.baseClasses.CreatedEntity;
+import lombok.*;
+import org.pepello.common.baseEntities.CreatedEntity;
 import org.pepello.entities.enums.MediaType;
 
 import java.math.BigDecimal;
@@ -15,6 +14,9 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "media")
 @AttributeOverride(name = "id", column = @Column(name = "media_id", nullable = false, updatable = false))
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Media extends CreatedEntity {
 
     @Enumerated(EnumType.STRING)

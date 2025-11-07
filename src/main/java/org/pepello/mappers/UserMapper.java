@@ -2,6 +2,7 @@ package org.pepello.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.pepello.common.mapper.BaseMapper;
 import org.pepello.dto.user.DtoUser;
 import org.pepello.entities.User;
 

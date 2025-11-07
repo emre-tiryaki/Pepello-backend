@@ -1,4 +1,4 @@
-package org.pepello.entities.baseClasses;
+package org.pepello.common.baseEntities;
 
 import jakarta.persistence.*;
 import lombok.Data;

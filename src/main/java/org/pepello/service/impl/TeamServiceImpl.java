@@ -42,16 +42,13 @@ public class TeamServiceImpl implements ITeamService {
         if (createDto == null)
             return null;
 
-        Team newTeam = new Team();
-
-        //TODO: allah aşkıına hata fırlat!!!!!!!!!
-        User ownerOfTeam = userService.getById(createDto.owner());
-
-        newTeam.setOwner(ownerOfTeam);
-        newTeam.setTeamName(createDto.name());
-        newTeam.setDescription(createDto.description());
-        //TODO: buraya mantık ekle
-        newTeam.setIcon(null);
+        Team newTeam = Team.builder()
+                .owner(userService.getById(createDto.owner()))
+                .teamName(createDto.name())
+                .description(createDto.description())
+                //TODO: buraya mantık ekle
+                .icon(null)
+                .build();
 
         return teamRepository.save(newTeam);
     }

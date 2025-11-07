@@ -6,15 +6,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.pepello.entities.baseClasses.CreatedEntity;
+import lombok.*;
+import org.pepello.common.baseEntities.CreatedEntity;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "roles")
 @AttributeOverride(name = "id", column = @Column(name = "role_id", nullable = false, updatable = false))
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Role extends CreatedEntity {
 
     @NotNull(message = "roles should have a name")

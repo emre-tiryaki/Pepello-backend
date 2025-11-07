@@ -4,7 +4,6 @@ import org.pepello.dto.user.UserCreateRequest;
 import org.pepello.dto.user.UserUpdateRequest;
 import org.pepello.entities.Media;
 import org.pepello.entities.User;
-import org.pepello.entities.enums.MediaType;
 import org.pepello.repository.MediaRepository;
 import org.pepello.repository.UserRepository;
 import org.pepello.service.IUserService;
@@ -53,14 +52,15 @@ public class UserServiceImpl implements IUserService {
         if (userRepository.existsByEmail(createDto.email()))
             return null;
 
-        User newUser = new User();
-        newUser.setFirstName(createDto.firstName());
-        newUser.setLastName(createDto.lastName());
-        newUser.setEmail(createDto.email());
-        newUser.setPassword(passwordService.hash(createDto.password()));
-        newUser.setBirthday(createDto.birthday());
-        //TODO: buraya mantık ekle
-        newUser.setProfilePic(null);
+        User newUser = User.builder()
+                .firstName(createDto.firstName())
+                .lastName(createDto.lastName())
+                .email(createDto.email())
+                .password(passwordService.hash(createDto.password()))
+                .birthday(createDto.birthday())
+                //TODO: buraya mantık ekle
+                .profilePic(null)
+                .build();
 
         return userRepository.save(newUser);
     }
@@ -76,7 +76,7 @@ public class UserServiceImpl implements IUserService {
         if (updateDto.firstName() != null) existingUser.setFirstName(updateDto.firstName());
         if (updateDto.lastName() != null) existingUser.setLastName(updateDto.lastName());
         if (updateDto.email() != null) existingUser.setEmail(updateDto.email());
-        if (updateDto.password() != null) existingUser.setPassword(updateDto.password());
+        if (updateDto.password() != null) existingUser.setPassword(passwordService.hash(updateDto.password()));
         if (updateDto.profilePicUrl() != null) {
             //TODO: Media servisini implemente et
             Media profilePic = existingUser.getProfilePic();

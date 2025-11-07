@@ -1,5 +1,6 @@
 package org.pepello.controller;
 
+import org.pepello.common.controller.ICrudEndpoints;
 import org.pepello.dto.user.DtoUser;
 import org.pepello.dto.user.UserCreateRequest;
 import org.pepello.dto.user.UserUpdateRequest;

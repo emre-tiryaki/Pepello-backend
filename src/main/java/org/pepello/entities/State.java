@@ -3,9 +3,8 @@ package org.pepello.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.pepello.entities.baseClasses.UpdatedEntity;
+import lombok.*;
+import org.pepello.common.baseEntities.UpdatedEntity;
 import org.pepello.entities.enums.Color;
 
 @Getter
@@ -13,6 +12,9 @@ import org.pepello.entities.enums.Color;
 @Entity
 @Table(name = "states")
 @AttributeOverride(name = "id", column = @Column(name = "state_id", nullable = false, updatable = false))
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class State extends UpdatedEntity {
 
     @NotNull(message = "state name cannot be null")

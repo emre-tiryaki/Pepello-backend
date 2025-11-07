@@ -1,40 +1,35 @@
-package org.pepello.controller;
+package org.pepello.common.controller;
 
+import org.pepello.common.ICrud;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
-/*
- * CRUD işlemleri için generic interface
- * @param <T> geri dönecek DTO tipi
- * @param <C> oluşturma için gelecek veri tipi
- * @param <U> güncelleme için gelecek veri tipi
- */
-public interface ICrudEndpoints<T, C, U> {
-    //tüm veritabanını çekmek
+public interface ICrudEndpoints<T, C, U> extends ICrud<T, C, U> {
     @GetMapping("/list")
+    @Override
     List<T> getAll();
 
-    //id'ye göre veritabanından eleman çekmek
     @GetMapping("/{id}")
+    @Override
     T getById(@PathVariable(name = "id") UUID id);
 
-    //veritabanına eleman eklemek
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
+    @Override
     T create(@RequestBody C createDto);
 
-    //veritabanındaki elemanı güncellemek
     @PatchMapping("/{id}")
+    @Override
     T update(
             @PathVariable(name = "id") UUID id,
             @RequestBody U updateDto
     );
 
-    //veritabanından eleman silmek
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Override
     void delete(@PathVariable(name = "id") UUID id);
 }

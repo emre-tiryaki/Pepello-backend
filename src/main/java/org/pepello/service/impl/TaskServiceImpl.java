@@ -42,21 +42,15 @@ public class TaskServiceImpl implements ITaskService {
             return null;
 
         //TODO: hata var!!!
-        Task newTask = new Task();
-
-        Project existingProject = projectService.getById(createDto.projectId());
-
-        newTask.setProject(existingProject);
-
-        State existingState = stateService.getById(createDto.stateId());
-
-        newTask.setState(existingState);
-
-        newTask.setMedia(null);
-        newTask.setTaskTitle(createDto.taskTitle());
-        newTask.setTaskDescription(createDto.taskDescription());
-        //TODO:buraya mantık ekle
-        newTask.setIsFinished(false);
+        Task newTask = Task.builder()
+                .project(projectService.getById(createDto.projectId()))
+                .state(stateService.getById(createDto.stateId()))
+                //TODO:buraya mantık ekle
+                .media(null)
+                .taskTitle(createDto.taskTitle())
+                .taskDescription(createDto.taskDescription())
+                .isFinished(false)
+                .build();
 
         return taskRepository.save(newTask);
     }
