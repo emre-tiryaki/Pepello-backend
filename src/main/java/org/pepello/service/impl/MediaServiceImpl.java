@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.media.MediaCreateRequest;
 import org.pepello.dto.media.MediaUpdateRequest;
 import org.pepello.entities.Media;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class MediaServiceImpl implements IMediaService {
     @Autowired
     private MediaRepository mediaRepository;
@@ -71,5 +73,10 @@ public class MediaServiceImpl implements IMediaService {
         Media existingMedia = getById(id);
 
         mediaRepository.delete(existingMedia);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return mediaRepository.existsById(id);
     }
 }

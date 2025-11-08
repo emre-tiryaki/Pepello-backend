@@ -24,4 +24,6 @@ public interface ICrud<T, C, U> {
 
     //veritabanından eleman silmek
     void delete(UUID id);
+
+    boolean exists(UUID id);
 }

@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.state.StateCreateRequest;
 import org.pepello.dto.state.StateUpdateRequest;
 import org.pepello.entities.State;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class StateServiceImpl implements IStateService {
     @Autowired
     private StateRepository stateRepository;
@@ -74,5 +76,10 @@ public class StateServiceImpl implements IStateService {
         State existingState = getById(id);
 
         stateRepository.delete(existingState);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return stateRepository.existsById(id);
     }
 }

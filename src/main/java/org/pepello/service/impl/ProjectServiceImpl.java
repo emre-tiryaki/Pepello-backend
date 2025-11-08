@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.project.ProjectCreateRequest;
 import org.pepello.dto.project.ProjectUpdateRequest;
 import org.pepello.entities.Project;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class ProjectServiceImpl implements IProjectService {
     @Autowired
     private ProjectRepository projectRepository;
@@ -74,5 +76,10 @@ public class ProjectServiceImpl implements IProjectService {
         Project existingProject = getById(id);
 
         projectRepository.delete(existingProject);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return projectRepository.existsById(id);
     }
 }

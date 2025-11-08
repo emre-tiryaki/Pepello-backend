@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.role.RoleCreateRequest;
 import org.pepello.dto.role.RoleUpdateRequest;
 import org.pepello.entities.Role;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class RoleServiceImpl implements IRoleService {
     @Autowired
     private RoleRepository roleRepository;
@@ -73,5 +75,10 @@ public class RoleServiceImpl implements IRoleService {
         Role existingRole = getById(id);
 
         roleRepository.delete(existingRole);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return roleRepository.existsById(id);
     }
 }

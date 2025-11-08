@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.chat.ChatCreateRequest;
 import org.pepello.dto.chat.ChatUpdateRequest;
 import org.pepello.entities.Chat;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class ChatServiceImpl implements IChatService {
     @Autowired
     private ChatRepository chatRepository;
@@ -78,5 +80,10 @@ public class ChatServiceImpl implements IChatService {
         Chat existingChat = getById(id);
 
         chatRepository.delete(existingChat);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return chatRepository.existsById(id);
     }
 }

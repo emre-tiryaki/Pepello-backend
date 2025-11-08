@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.user.UserCreateRequest;
 import org.pepello.dto.user.UserUpdateRequest;
 import org.pepello.entities.Media;
@@ -15,14 +16,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class UserServiceImpl implements IUserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private PasswordServiceImpl passwordService;
-    //TODO: burayı daha profesyonel yazabilirsin. güveniyorum sana ilerideki ben :)
-    @Autowired
-    private MediaRepository mediaRepository;
 
     @Override
     public List<User> getAll() {
@@ -102,5 +101,10 @@ public class UserServiceImpl implements IUserService {
         User existingUser = getById(id);
 
         userRepository.delete(existingUser);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return userRepository.existsById(id);
     }
 }

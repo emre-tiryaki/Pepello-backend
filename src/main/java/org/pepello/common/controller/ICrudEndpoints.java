@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * EntityControllerları için basit crud endpointleri
+ * @param <T> geri dönecek dto tipi
+ * @param <C> yaratma isteği tipi
+ * @param <U> güncelleme isteği tipi
+ */
 public interface ICrudEndpoints<T, C, U> extends ICrud<T, C, U> {
     @GetMapping("/list")
     @Override

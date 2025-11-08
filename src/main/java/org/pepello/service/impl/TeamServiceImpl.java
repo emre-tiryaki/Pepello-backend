@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.team.TeamCreateRequest;
 import org.pepello.dto.team.TeamUpdateRequest;
 import org.pepello.entities.Team;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class TeamServiceImpl implements ITeamService {
     @Autowired
     private TeamRepository teamRepository;
@@ -85,5 +87,10 @@ public class TeamServiceImpl implements ITeamService {
         Team existingTeam = getById(id);
 
         teamRepository.delete(existingTeam);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return teamRepository.existsById(id);
     }
 }

@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.comment.CommentCreateRequest;
 import org.pepello.dto.comment.CommentUpdateRequest;
 import org.pepello.entities.Comment;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class CommentServiceImpl implements ICommentService {
     @Autowired
     private CommentRepository commentRepository;
@@ -84,5 +86,10 @@ public class CommentServiceImpl implements ICommentService {
         Comment existingComment = getById(id);
 
         commentRepository.delete(existingComment);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return commentRepository.existsById(id);
     }
 }

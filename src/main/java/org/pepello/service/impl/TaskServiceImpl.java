@@ -1,5 +1,6 @@
 package org.pepello.service.impl;
 
+import jakarta.transaction.Transactional;
 import org.pepello.dto.task.TaskCreateRequest;
 import org.pepello.dto.task.TaskUpdateRequest;
 import org.pepello.entities.Project;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class TaskServiceImpl implements ITaskService {
     @Autowired
     private TaskRepository taskRepository;
@@ -89,5 +91,10 @@ public class TaskServiceImpl implements ITaskService {
         Task existingTask = getById(id);
 
         taskRepository.delete(existingTask);
+    }
+
+    @Override
+    public boolean exists(UUID id) {
+        return taskRepository.existsById(id);
     }
 }
