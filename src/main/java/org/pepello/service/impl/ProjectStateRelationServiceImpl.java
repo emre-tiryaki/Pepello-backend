@@ -1,5 +1,8 @@
 package org.pepello.service.impl;
 
+import org.pepello.common.ICrud;
+import org.pepello.common.repository.BaseRelationRepository;
+import org.pepello.common.service.BaseRelationService;
 import org.pepello.entities.Project;
 import org.pepello.entities.ProjectStateRelation;
 import org.pepello.entities.State;
@@ -14,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ProjectStateRelationServiceImpl implements IProjectStateRelationService {
+public class ProjectStateRelationServiceImpl extends BaseRelationService<Project, State, ProjectStateRelation> implements IProjectStateRelationService {
     @Autowired
     private ProjectStateRelationRepository projectStateRelationRepository;
     @Autowired
@@ -22,132 +25,77 @@ public class ProjectStateRelationServiceImpl implements IProjectStateRelationSer
     @Autowired
     private IStateService stateService;
 
+
     @Override
-    public ProjectStateRelation addRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return null;
+    protected BaseRelationRepository<ProjectStateRelation> getRepository() {
+        return projectStateRelationRepository;
+    }
 
-        Project existingProject = projectService.getById(primaryId);
-        State existingState = stateService.getById(relatedId);
+    @Override
+    protected ICrud<Project, ?, ?> getPrimaryService() {
+        return projectService;
+    }
 
-        ProjectStateRelation relation = ProjectStateRelation.builder()
-                .project(existingProject)
-                .state(existingState)
+    @Override
+    protected ICrud<State, ?, ?> getRelatedService() {
+        return stateService;
+    }
+
+    @Override
+    protected ProjectStateRelation buildRelation(Project project, State state) {
+        return ProjectStateRelation.builder()
+                .project(project)
+                .state(state)
                 .build();
-
-        return projectStateRelationRepository.save(relation);
     }
 
     @Override
-    public ProjectStateRelation getRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return null;
-
-        //TODO: hata fırlat koç
-        return projectStateRelationRepository
-                .findByProject_IdAndState_Id(primaryId, relatedId)
-                .orElseThrow(null);
+    protected java.util.Optional<ProjectStateRelation> findRelationOptional(UUID primaryId, UUID relatedId) {
+        return projectStateRelationRepository.findByProject_IdAndState_Id(primaryId, relatedId);
     }
 
     @Override
-    public void removeRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return;
-
-        ProjectStateRelation relation = getRelation(primaryId, relatedId);
-
-        projectStateRelationRepository.delete(relation);
-    }
-
-    @Override
-    public List<ProjectStateRelation> getAllRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return null;
-
+    protected List<ProjectStateRelation> findByPrimaryId(UUID primaryId) {
         return projectStateRelationRepository.findByProject_Id(primaryId);
     }
 
     @Override
-    public List<ProjectStateRelation> getAllRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return null;
-
+    protected List<ProjectStateRelation> findByRelatedId(UUID relatedId) {
         return projectStateRelationRepository.findByState_Id(relatedId);
     }
 
     @Override
-    public void removeAllRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return;
-
+    protected void deleteAllByPrimaryId(UUID primaryId) {
         projectStateRelationRepository.deleteAllByProject_Id(primaryId);
     }
 
     @Override
-    public void removeAllRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return;
-
+    protected void deleteAllByRelatedId(UUID relatedId) {
         projectStateRelationRepository.deleteAllByState_Id(relatedId);
     }
 
     @Override
-    public List<State> getRelatedEntities(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return null;
-
-        List<ProjectStateRelation> relations = getAllRelations(primaryId);
-
-        return relations.stream()
-                .map(ProjectStateRelation::getState)
-                .toList();
-    }
-
-    @Override
-    public List<Project> getPrimaryEntities(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return null;
-
-        List<ProjectStateRelation> relations = getAllRelationsByRelatedId(relatedId);
-
-        return relations.stream()
-                .map(ProjectStateRelation::getProject)
-                .toList();
-    }
-
-    @Override
-    public boolean relationExists(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return false;
-
+    protected boolean existsRelation(UUID primaryId, UUID relatedId) {
         return projectStateRelationRepository.existsByProject_IdAndState_Id(primaryId, relatedId);
     }
 
     @Override
-    public long countRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return 0;
-
+    protected long countByPrimaryId(UUID primaryId) {
         return projectStateRelationRepository.countByProject_Id(primaryId);
     }
 
     @Override
-    public long countRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return 0;
-
+    protected long countByRelatedId(UUID relatedId) {
         return projectStateRelationRepository.countByState_Id(relatedId);
+    }
+
+    @Override
+    protected Project extractPrimary(ProjectStateRelation projectStateRelation) {
+        return projectStateRelation.getProject();
+    }
+
+    @Override
+    protected State extractRelated(ProjectStateRelation projectStateRelation) {
+        return projectStateRelation.getState();
     }
 }

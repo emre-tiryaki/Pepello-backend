@@ -48,4 +48,9 @@ public class MediaControllerImpl implements IMediaController {
     public void delete(UUID id) {
         mediaService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return mediaService.exists(id);
+    }
 }

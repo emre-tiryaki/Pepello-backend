@@ -47,4 +47,9 @@ public class StateControllerImpl implements IStateController {
     public void delete(UUID id) {
         stateService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return stateService.exists(id);
+    }
 }

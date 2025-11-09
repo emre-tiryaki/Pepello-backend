@@ -1,5 +1,6 @@
 package org.pepello.dto.task;
 
+import org.pepello.common.request.BaseUpdateRequest;
 import org.pepello.dto.media.DtoMedia;
 
 import java.util.UUID;
@@ -11,5 +12,5 @@ public record TaskUpdateRequest(
         String taskTitle,
         String taskDescription,
         Boolean isFinished
-) {
+) implements BaseUpdateRequest {
 }

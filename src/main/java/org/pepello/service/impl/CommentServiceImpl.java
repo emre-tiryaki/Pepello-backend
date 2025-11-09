@@ -33,19 +33,21 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public Comment getById(UUID id) {
-        //TODO: hata fırlat!!!!
-        if (id == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         return commentRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("Comment bulunamadı: " + id));
     }
 
     @Override
     public Comment create(CommentCreateRequest createDto) {
-        //TODO: hata
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
         Comment newComment = Comment.builder()
                 .task(taskService.getById(createDto.taskId()))
@@ -58,9 +60,13 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public Comment update(UUID id, CommentUpdateRequest updateDto) {
-        //TODO: hata
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
         Comment existingComment = getById(id);
 
@@ -79,9 +85,10 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public void delete(UUID id) {
-        //TODO: allah aşkına hata fırlat
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         Comment existingComment = getById(id);
 

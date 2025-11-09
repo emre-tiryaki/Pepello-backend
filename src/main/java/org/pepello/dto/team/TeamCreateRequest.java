@@ -1,5 +1,6 @@
 package org.pepello.dto.team;
 
+import org.pepello.common.request.BaseCreateRequest;
 import org.pepello.dto.media.DtoMedia;
 
 import java.util.UUID;
@@ -9,5 +10,5 @@ public record TeamCreateRequest(
         DtoMedia icon,
         String name,
         String description
-) {
+) implements BaseCreateRequest {
 }

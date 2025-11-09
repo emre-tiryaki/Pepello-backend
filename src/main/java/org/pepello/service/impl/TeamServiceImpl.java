@@ -29,20 +29,21 @@ public class TeamServiceImpl implements ITeamService {
 
     @Override
     public Team getById(UUID id) {
-        //TODO: hata fırlat!!!
-        if (id == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
-        //TODO: hata fırlat!!!
         return teamRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("Team bulunamadı: " + id));
     }
 
     @Override
     public Team create(TeamCreateRequest createDto) {
-        //TODO: hata fırlat aq!!!
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
         Team newTeam = Team.builder()
                 .owner(userService.getById(createDto.owner()))
@@ -57,16 +58,17 @@ public class TeamServiceImpl implements ITeamService {
 
     @Override
     public Team update(UUID id, TeamUpdateRequest updateDto) {
-        //TODO: hata fırlat aq!!!
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
-        //TODO:hata fırlat!!!
-        Team existingTeam = teamRepository.findById(id)
-                .orElseThrow(null);
+        Team existingTeam = getById(id);
 
         if (updateDto.owner() != null) {
-            //TODO: allah aşkıına hata fırlat!!!!!!!!!
             User ownerOfTeam = userService.getById(updateDto.owner());
             existingTeam.setOwner(ownerOfTeam);
         }
@@ -80,10 +82,11 @@ public class TeamServiceImpl implements ITeamService {
 
     @Override
     public void delete(UUID id) {
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
-        //TODO:hata fırlat
         Team existingTeam = getById(id);
 
         teamRepository.delete(existingTeam);

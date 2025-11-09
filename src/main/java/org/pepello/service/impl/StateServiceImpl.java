@@ -25,19 +25,21 @@ public class StateServiceImpl implements IStateService {
 
     @Override
     public State getById(UUID id) {
-        //TODO: hata
-        if (id == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         return stateRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("State bulunamadı: " + id));
     }
 
     @Override
     public State create(StateCreateRequest createDto) {
-        //TODO: hata
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
         State newState = State.builder()
                 .stateName(createDto.stateName())
@@ -51,9 +53,13 @@ public class StateServiceImpl implements IStateService {
 
     @Override
     public State update(UUID id, StateUpdateRequest updateDto) {
-        //TODO: hata var
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
         State existingState = getById(id);
 
@@ -69,9 +75,10 @@ public class StateServiceImpl implements IStateService {
 
     @Override
     public void delete(UUID id) {
-        //TODO: hata
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         State existingState = getById(id);
 

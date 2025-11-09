@@ -5,7 +5,6 @@ import org.pepello.dto.user.UserCreateRequest;
 import org.pepello.dto.user.UserUpdateRequest;
 import org.pepello.entities.Media;
 import org.pepello.entities.User;
-import org.pepello.repository.MediaRepository;
 import org.pepello.repository.UserRepository;
 import org.pepello.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,26 +29,32 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User getById(UUID id) {
-        // TODO: exception mimarisi yap ve hata fırlat
-        if (id == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
-        //TODO: bulunamazsa hata fırlatmalı
         return userRepository.findById(id)
-                .orElseGet(() -> null);
+                .orElseThrow(() -> new RuntimeException("User bulunamadı: " + id));
     }
 
     @Override
     public User create(UserCreateRequest createDto) {
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
-        if (createDto.email() == null || createDto.password() == null || createDto.firstName() == null || createDto.lastName() == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto.email() == null || createDto.password() == null ||
+                createDto.firstName() == null || createDto.lastName() == null) {
+            throw new RuntimeException("Gerekli alanlar eksik");
+        }
 
-        //TODO: hata fırlat
-        if (userRepository.existsByEmail(createDto.email()))
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (userRepository.existsByEmail(createDto.email())) {
+            throw new RuntimeException("Bu email zaten kullanılıyor");
+        }
 
         User newUser = User.builder()
                 .firstName(createDto.firstName())
@@ -66,10 +71,14 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User update(UUID id, UserUpdateRequest updateDto) {
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
-        //TODO: hatayı düzelt buradaki
         User existingUser = getById(id);
 
         if (updateDto.firstName() != null) existingUser.setFirstName(updateDto.firstName());
@@ -93,11 +102,11 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void delete(UUID id) {
-        //TODO: hata fırlatcak bura
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
-        //TODO: buradaki hata fırlatsın
         User existingUser = getById(id);
 
         userRepository.delete(existingUser);

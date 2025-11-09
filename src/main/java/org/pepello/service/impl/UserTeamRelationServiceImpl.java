@@ -1,6 +1,9 @@
 package org.pepello.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.pepello.common.ICrud;
+import org.pepello.common.repository.BaseRelationRepository;
+import org.pepello.common.service.BaseRelationService;
 import org.pepello.entities.Team;
 import org.pepello.entities.User;
 import org.pepello.entities.UserTeamRelation;
@@ -16,7 +19,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class UserTeamRelationServiceImpl implements IUserTeamRelationService {
+public class UserTeamRelationServiceImpl extends BaseRelationService<User, Team, UserTeamRelation> implements IUserTeamRelationService {
     @Autowired
     private UserTeamRelationRepository userTeamRelationRepository;
     @Autowired
@@ -24,140 +27,77 @@ public class UserTeamRelationServiceImpl implements IUserTeamRelationService {
     @Autowired
     private ITeamService teamService;
 
+
     @Override
-    public UserTeamRelation addRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return null;
+    protected BaseRelationRepository<UserTeamRelation> getRepository() {
+        return userTeamRelationRepository;
+    }
 
-        //TODO: hata fırlatmalısın panpa
-        if (relationExists(primaryId, relatedId))
-            return null;
+    @Override
+    protected ICrud<User, ?, ?> getPrimaryService() {
+        return userService;
+    }
 
-        User existingUser = userService.getById(primaryId);
-        Team existingTeam = teamService.getById(relatedId);
+    @Override
+    protected ICrud<Team, ?, ?> getRelatedService() {
+        return teamService;
+    }
 
-        UserTeamRelation relation = UserTeamRelation.builder()
-                .user(existingUser)
-                .team(existingTeam)
+    @Override
+    protected UserTeamRelation buildRelation(User user, Team team) {
+        return UserTeamRelation.builder()
+                .user(user)
+                .team(team)
                 .build();
-
-        return userTeamRelationRepository.save(relation);
     }
 
     @Override
-    public UserTeamRelation getRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return null;
-
-        //TODO: hata at!!!
-        if (!userService.exists(primaryId) || !teamService.exists(relatedId))
-            return null;
-
-        //TODO: hata fırlatsana
-        return userTeamRelationRepository
-                .findByUser_IdAndTeam_Id(primaryId, relatedId)
-                .orElseThrow(null);
+    protected java.util.Optional<UserTeamRelation> findRelationOptional(UUID primaryId, UUID relatedId) {
+        return userTeamRelationRepository.findByUser_IdAndTeam_Id(primaryId, relatedId);
     }
 
     @Override
-    public void removeRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return;
-
-        UserTeamRelation relation = getRelation(primaryId, relatedId);
-
-        userTeamRelationRepository.delete(relation);
-    }
-
-    @Override
-    public List<UserTeamRelation> getAllRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return null;
-
+    protected List<UserTeamRelation> findByPrimaryId(UUID primaryId) {
         return userTeamRelationRepository.findByUser_Id(primaryId);
     }
 
     @Override
-    public List<UserTeamRelation> getAllRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return null;
-
+    protected List<UserTeamRelation> findByRelatedId(UUID relatedId) {
         return userTeamRelationRepository.findByTeam_Id(relatedId);
     }
 
     @Override
-    public void removeAllRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return;
-
+    protected void deleteAllByPrimaryId(UUID primaryId) {
         userTeamRelationRepository.deleteAllByUser_Id(primaryId);
     }
 
     @Override
-    public void removeAllRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return;
-
+    protected void deleteAllByRelatedId(UUID relatedId) {
         userTeamRelationRepository.deleteAllByTeam_Id(relatedId);
     }
 
     @Override
-    public List<Team> getRelatedEntities(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return null;
-
-        List<UserTeamRelation> relations = getAllRelations(primaryId);
-
-        return relations.stream()
-                .map(UserTeamRelation::getTeam)
-                .toList();
-    }
-
-    @Override
-    public List<User> getPrimaryEntities(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return null;
-
-        List<UserTeamRelation> relations = getAllRelationsByRelatedId(relatedId);
-
-        return relations.stream()
-                .map(UserTeamRelation::getUser)
-                .toList();
-    }
-
-    @Override
-    public boolean relationExists(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return false;
-
+    protected boolean existsRelation(UUID primaryId, UUID relatedId) {
         return userTeamRelationRepository.existsByUser_IdAndTeam_Id(primaryId, relatedId);
     }
 
     @Override
-    public long countRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return 0;
-
+    protected long countByPrimaryId(UUID primaryId) {
         return userTeamRelationRepository.countByUser_Id(primaryId);
     }
 
     @Override
-    public long countRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return 0;
-
+    protected long countByRelatedId(UUID relatedId) {
         return userTeamRelationRepository.countByTeam_Id(relatedId);
+    }
+
+    @Override
+    protected User extractPrimary(UserTeamRelation userTeamRelation) {
+        return userTeamRelation.getUser();
+    }
+
+    @Override
+    protected Team extractRelated(UserTeamRelation userTeamRelation) {
+        return userTeamRelation.getTeam();
     }
 }

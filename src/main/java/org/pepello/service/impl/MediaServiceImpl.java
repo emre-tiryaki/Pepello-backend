@@ -25,20 +25,21 @@ public class MediaServiceImpl implements IMediaService {
 
     @Override
     public Media getById(UUID id) {
-        //TODO: hataa!!
-        if (id == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
-        //TODO: hataa!!
         return mediaRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("Media bulunamadı: " + id));
     }
 
     @Override
     public Media create(MediaCreateRequest createDto) {
-        //TODO: hataa!!
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
         Media newMedia = Media.builder()
                 .mediaUrl(createDto.mediaUrl())
@@ -51,9 +52,13 @@ public class MediaServiceImpl implements IMediaService {
 
     @Override
     public Media update(UUID id, MediaUpdateRequest updateDto) {
-        //TODO: hataa!!
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
         Media existingMedia = getById(id);
 
@@ -66,9 +71,10 @@ public class MediaServiceImpl implements IMediaService {
 
     @Override
     public void delete(UUID id) {
-        //TODO: hataa!!
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         Media existingMedia = getById(id);
 

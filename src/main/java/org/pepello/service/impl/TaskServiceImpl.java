@@ -33,17 +33,21 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public Task getById(UUID id) {
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
         return taskRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("Task bulunamadı: " + id));
     }
 
     @Override
     public Task create(TaskCreateRequest createDto) {
-        //TODO: aaaaaaa
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
-        //TODO: hata var!!!
         Task newTask = Task.builder()
                 .project(projectService.getById(createDto.projectId()))
                 .state(stateService.getById(createDto.stateId()))
@@ -59,9 +63,13 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public Task update(UUID id, TaskUpdateRequest updateDto) {
-        //TODO: hataaa
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
         Task existingTask = getById(id);
 
@@ -84,9 +92,10 @@ public class TaskServiceImpl implements ITaskService {
 
     @Override
     public void delete(UUID id) {
-        //TODO: hata fırlaaaaaaat!!!!!!!
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         Task existingTask = getById(id);
 

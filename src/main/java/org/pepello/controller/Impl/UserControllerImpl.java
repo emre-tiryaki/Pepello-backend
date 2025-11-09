@@ -47,4 +47,9 @@ public class UserControllerImpl implements IUserController {
     public void delete(UUID id) {
         userService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return userService.exists(id);
+    }
 }

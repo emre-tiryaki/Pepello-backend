@@ -29,20 +29,21 @@ public class ChatServiceImpl implements IChatService {
 
     @Override
     public Chat getById(UUID id) {
-        //TODO:hata fırlat canım
-        if (id == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
-        //TODO:hata fırlat canım
         return chatRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("Chat bulunamadı: " + id));
     }
 
     @Override
     public Chat create(ChatCreateRequest createDto) {
-        //TODO:hata fırlat
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
         Chat newChat = Chat.builder()
                 .team(teamService.getById(createDto.teamId()))
@@ -55,9 +56,13 @@ public class ChatServiceImpl implements IChatService {
 
     @Override
     public Chat update(UUID id, ChatUpdateRequest updateDto) {
-        //TODO:hata fırlat canım
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
         Chat existingChat = getById(id);
 
@@ -73,9 +78,10 @@ public class ChatServiceImpl implements IChatService {
 
     @Override
     public void delete(UUID id) {
-        //TODO:hata fırlat canım
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         Chat existingChat = getById(id);
 

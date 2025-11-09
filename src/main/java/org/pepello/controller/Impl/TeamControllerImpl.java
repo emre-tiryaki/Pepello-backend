@@ -47,4 +47,9 @@ public class TeamControllerImpl implements ITeamController {
     public void delete(UUID id) {
         teamService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return teamService.exists(id);
+    }
 }

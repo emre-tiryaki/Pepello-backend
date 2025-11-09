@@ -47,4 +47,9 @@ public class RoleControllerImpl implements IRoleController {
     public void delete(UUID id) {
         roleService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return roleService.exists(id);
+    }
 }

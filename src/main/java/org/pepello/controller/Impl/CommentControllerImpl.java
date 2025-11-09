@@ -45,4 +45,9 @@ public class CommentControllerImpl implements ICommentController {
     public void delete(UUID id) {
         commentService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return commentService.exists(id);
+    }
 }

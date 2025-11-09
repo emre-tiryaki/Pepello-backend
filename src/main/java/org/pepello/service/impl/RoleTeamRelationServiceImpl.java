@@ -1,5 +1,8 @@
 package org.pepello.service.impl;
 
+import org.pepello.common.ICrud;
+import org.pepello.common.repository.BaseRelationRepository;
+import org.pepello.common.service.BaseRelationService;
 import org.pepello.entities.Role;
 import org.pepello.entities.RoleTeamRelation;
 import org.pepello.entities.Team;
@@ -14,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class RoleTeamRelationServiceImpl implements IRoleTeamRelationService {
+public class RoleTeamRelationServiceImpl extends BaseRelationService<Role, Team, RoleTeamRelation> implements IRoleTeamRelationService {
     @Autowired
     private RoleTeamRelationRepository roleTeamRelationRepository;
     @Autowired
@@ -23,134 +26,75 @@ public class RoleTeamRelationServiceImpl implements IRoleTeamRelationService {
     private ITeamService teamService;
 
     @Override
-    public RoleTeamRelation addRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return null;
+    protected BaseRelationRepository<RoleTeamRelation> getRepository() {
+        return roleTeamRelationRepository;
+    }
 
-        //TODO: hata fırlatmalısın panpa
-        if (relationExists(primaryId, relatedId))
-            return null;
+    @Override
+    protected ICrud<Role, ?, ?> getPrimaryService() {
+        return roleService;
+    }
 
-        Role existingRole = roleService.getById(primaryId);
-        Team existingTeam = teamService.getById(relatedId);
+    @Override
+    protected ICrud<Team, ?, ?> getRelatedService() {
+        return teamService;
+    }
 
-        RoleTeamRelation relation = RoleTeamRelation.builder()
-                .role(existingRole)
-                .team(existingTeam)
+    @Override
+    protected RoleTeamRelation buildRelation(Role role, Team team) {
+        return RoleTeamRelation.builder()
+                .role(role)
+                .team(team)
                 .build();
-
-        return roleTeamRelationRepository.save(relation);
     }
 
     @Override
-    public RoleTeamRelation getRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return null;
-
-        //TODO: hata fırlat
-        return roleTeamRelationRepository
-                .findByRole_IdAndUser_Id(primaryId, relatedId)
-                .orElseThrow(null);
+    protected java.util.Optional<RoleTeamRelation> findRelationOptional(UUID primaryId, UUID relatedId) {
+        return roleTeamRelationRepository.findByRole_IdAndTeam_Id(primaryId, relatedId);
     }
 
     @Override
-    public void removeRelation(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return;
-
-        RoleTeamRelation relation = getRelation(primaryId, relatedId);
-
-        roleTeamRelationRepository.delete(relation);
-    }
-
-    @Override
-    public List<RoleTeamRelation> getAllRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return null;
-
+    protected List<RoleTeamRelation> findByPrimaryId(UUID primaryId) {
         return roleTeamRelationRepository.findByRole_Id(primaryId);
     }
 
     @Override
-    public List<RoleTeamRelation> getAllRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return null;
-
+    protected List<RoleTeamRelation> findByRelatedId(UUID relatedId) {
         return roleTeamRelationRepository.findByTeam_Id(relatedId);
     }
 
     @Override
-    public void removeAllRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return;
-
+    protected void deleteAllByPrimaryId(UUID primaryId) {
         roleTeamRelationRepository.deleteAllByRole_Id(primaryId);
     }
 
     @Override
-    public void removeAllRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return;
-
+    protected void deleteAllByRelatedId(UUID relatedId) {
         roleTeamRelationRepository.deleteAllByTeam_Id(relatedId);
     }
 
     @Override
-    public List<Team> getRelatedEntities(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return null;
-
-        List<RoleTeamRelation> relations = getAllRelations(primaryId);
-
-        return relations.stream()
-                .map(RoleTeamRelation::getTeam)
-                .toList();
-    }
-
-    @Override
-    public List<Role> getPrimaryEntities(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return null;
-        List<RoleTeamRelation> relations = getAllRelationsByRelatedId(relatedId);
-
-        return relations.stream()
-                .map(RoleTeamRelation::getRole)
-                .toList();
-    }
-
-    @Override
-    public boolean relationExists(UUID primaryId, UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null || relatedId == null)
-            return false;
-
+    protected boolean existsRelation(UUID primaryId, UUID relatedId) {
         return roleTeamRelationRepository.existsByRole_IdAndTeam_Id(primaryId, relatedId);
     }
 
     @Override
-    public long countRelations(UUID primaryId) {
-        //TODO: hata fırlat burda!!!
-        if (primaryId == null)
-            return 0;
-
+    protected long countByPrimaryId(UUID primaryId) {
         return roleTeamRelationRepository.countByRole_Id(primaryId);
     }
 
     @Override
-    public long countRelationsByRelatedId(UUID relatedId) {
-        //TODO: hata fırlat burda!!!
-        if (relatedId == null)
-            return 0;
-
+    protected long countByRelatedId(UUID relatedId) {
         return roleTeamRelationRepository.countByTeam_Id(relatedId);
+    }
+
+    @Override
+    protected Role extractPrimary(RoleTeamRelation roleTeamRelation) {
+        return roleTeamRelation.getRole();
+    }
+
+    @Override
+    protected Team extractRelated(RoleTeamRelation roleTeamRelation) {
+        return roleTeamRelation.getTeam();
     }
 }

@@ -47,4 +47,9 @@ public class ProjectControllerImpl implements IProjectController {
     public void delete(UUID id) {
         projectService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return projectService.exists(id);
+    }
 }

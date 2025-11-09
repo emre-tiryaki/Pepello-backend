@@ -47,4 +47,9 @@ public class ChatControllerImpl implements IChatController {
     public void delete(UUID id) {
         chatService.delete(id);
     }
+
+    @Override
+    public boolean exists(UUID id) {
+        return chatService.exists(id);
+    }
 }

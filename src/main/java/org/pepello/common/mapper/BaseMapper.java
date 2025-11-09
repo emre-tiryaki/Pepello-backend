@@ -2,6 +2,7 @@ package org.pepello.common.mapper;
 
 /**
  * Mapperlar&#x131;n implemente edecekleri interface
+ *
  * @param <E> entity
  * @param <D> Dto
  */

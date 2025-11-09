@@ -25,20 +25,25 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public Role getById(UUID id) {
-        //TODO: hata mimarisini yap
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
         return roleRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("Role bulunamadı: " + id));
     }
 
     @Override
     public Role create(RoleCreateRequest createDto) {
-        //TODO: hata fırlat!!!
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
-        //TODO: hata fırlat!!!
-        if (roleRepository.existsByRoleName(createDto.name()))
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (roleRepository.existsByRoleName(createDto.name())) {
+            throw new RuntimeException("Bu isimde bir role zaten mevcut");
+        }
 
         Role newRole = Role.builder()
                 .roleName(createDto.name())
@@ -50,13 +55,18 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public Role update(UUID id, RoleUpdateRequest updateDto) {
-        //TODO: hata fırlat!!!
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
-        //TODO: hata fırlat!!!
-        if (updateDto.name() != null && roleRepository.existsByRoleName(updateDto.name()))
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (updateDto.name() != null && roleRepository.existsByRoleName(updateDto.name())) {
+            throw new RuntimeException("Bu isimde bir role zaten mevcut");
+        }
 
         Role existingRole = getById(id);
 
@@ -68,9 +78,10 @@ public class RoleServiceImpl implements IRoleService {
 
     @Override
     public void delete(UUID id) {
-        //TODO: hata fırlat nolur
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         Role existingRole = getById(id);
 

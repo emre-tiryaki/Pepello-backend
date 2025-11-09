@@ -25,16 +25,20 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public Project getById(UUID id) {
-        //TODO: hata fırlat!!!!!!
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
         return projectRepository.findById(id)
-                .orElseThrow(null);
+                .orElseThrow(() -> new RuntimeException("Project bulunamadı: " + id));
     }
 
     @Override
     public Project create(ProjectCreateRequest createDto) {
-        //TODO: hata fırlat!!!!
-        if (createDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (createDto == null) {
+            throw new RuntimeException("CreateDto null olamaz");
+        }
 
         Project newProject = Project.builder()
                 .projectName(createDto.projectName())
@@ -50,9 +54,13 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public Project update(UUID id, ProjectUpdateRequest updateDto) {
-        //TODO:hata fırlat!!!
-        if (id == null || updateDto == null)
-            return null;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
+        if (updateDto == null) {
+            throw new RuntimeException("UpdateDto null olamaz");
+        }
 
         Project existingProject = getById(id);
 
@@ -69,9 +77,10 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public void delete(UUID id) {
-        //TODO: hata!!!!!!!
-        if (id == null)
-            return;
+        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+        if (id == null) {
+            throw new RuntimeException("ID null olamaz");
+        }
 
         Project existingProject = getById(id);
 

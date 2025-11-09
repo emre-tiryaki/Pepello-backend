@@ -1,5 +1,7 @@
 package org.pepello.dto.user;
 
+import org.pepello.common.request.BaseUpdateRequest;
+
 import java.time.LocalDate;
 
 //Kullanıcı güncelleme için parametreler
@@ -10,5 +12,5 @@ public record UserUpdateRequest(
         String password,
         String profilePicUrl,
         LocalDate birthday
-) {
+) implements BaseUpdateRequest {
 }
