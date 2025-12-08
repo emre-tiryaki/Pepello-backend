@@ -12,27 +12,27 @@ import java.util.UUID;
 /**
  * EntityControllerları için basit crud endpointleri
  *
- * @param <T> geri dönecek dto tipi
+ * @param <D> geri dönecek dto tipi
  * @param <C> create request tipi (BaseCreateRequest implement etmeli)
  * @param <U> update request tipi (BaseUpdateRequest implement etmeli)
  */
-public interface ICrudEndpoints<T, C extends BaseCreateRequest, U extends BaseUpdateRequest> extends ICrud<T, C, U> {
+public interface ICrudEndpoints<D, C extends BaseCreateRequest, U extends BaseUpdateRequest> extends ICrud<D, C, U> {
     @GetMapping("/list")
     @Override
-    List<T> getAll();
+    List<D> getAll();
 
     @GetMapping("/{id}")
     @Override
-    T getById(@PathVariable(name = "id") UUID id);
+    D getById(@PathVariable(name = "id") UUID id);
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     @Override
-    T create(@RequestBody C createDto);
+    D create(@RequestBody C createDto);
 
     @PatchMapping("/{id}")
     @Override
-    T update(
+    D update(
             @PathVariable(name = "id") UUID id,
             @RequestBody U updateDto
     );

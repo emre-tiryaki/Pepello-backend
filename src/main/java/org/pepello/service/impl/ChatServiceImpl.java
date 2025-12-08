@@ -1,95 +1,64 @@
 package org.pepello.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.pepello.common.service.BaseCrudService;
 import org.pepello.dto.chat.ChatCreateRequest;
 import org.pepello.dto.chat.ChatUpdateRequest;
 import org.pepello.entities.Chat;
-import org.pepello.entities.Team;
-import org.pepello.repository.ChatRepository;
+import org.pepello.entities.Media;
 import org.pepello.service.IChatService;
+import org.pepello.service.IMediaService;
 import org.pepello.service.ITeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class ChatServiceImpl implements IChatService {
-    @Autowired
-    private ChatRepository chatRepository;
+public class ChatServiceImpl extends BaseCrudService<Chat, ChatCreateRequest, ChatUpdateRequest> implements IChatService {
     @Autowired
     private ITeamService teamService;
+    @Autowired
+    private IMediaService mediaService;
 
-    @Override
-    public List<Chat> getAll() {
-        return chatRepository.findAll();
+    public ChatServiceImpl(JpaRepository<Chat, UUID> repository) {
+        super(repository);
     }
 
     @Override
-    public Chat getById(UUID id) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (id == null) {
-            throw new RuntimeException("ID null olamaz");
-        }
-
-        return chatRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chat bulunamadı: " + id));
-    }
-
-    @Override
-    public Chat create(ChatCreateRequest createDto) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (createDto == null) {
-            throw new RuntimeException("CreateDto null olamaz");
-        }
-
-        Chat newChat = Chat.builder()
+    protected Chat buildEntity(ChatCreateRequest createDto) {
+        return Chat.builder()
                 .team(teamService.getById(createDto.teamId()))
+                .icon(resolveIcon(createDto.iconId()))
                 .name(createDto.chatName())
                 .description(createDto.description())
                 .build();
-
-        return chatRepository.save(newChat);
     }
 
     @Override
-    public Chat update(UUID id, ChatUpdateRequest updateDto) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (id == null) {
-            throw new RuntimeException("ID null olamaz");
-        }
-        if (updateDto == null) {
-            throw new RuntimeException("UpdateDto null olamaz");
-        }
-
-        Chat existingChat = getById(id);
-
-        if (updateDto.teamId() != null) {
-            Team existingTeam = teamService.getById(updateDto.teamId());
-            existingChat.setTeam(existingTeam);
-        }
-        if (updateDto.name() != null) existingChat.setName(updateDto.name());
-        if (updateDto.description() != null) existingChat.setDescription(updateDto.description());
-
-        return chatRepository.save(existingChat);
+    protected void updateEntity(Chat existingEntity, ChatUpdateRequest updateDto) {
+        if (updateDto.teamId() != null)
+            existingEntity.setTeam(teamService.getById(updateDto.teamId()));
+        if (updateDto.iconId() != null)
+            existingEntity.setIcon(resolveIcon(updateDto.iconId()));
+        if (updateDto.name() != null)
+            existingEntity.setName(updateDto.name());
+        if (updateDto.description() != null)
+            existingEntity.setDescription(updateDto.description());
     }
 
-    @Override
-    public void delete(UUID id) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (id == null) {
-            throw new RuntimeException("ID null olamaz");
+    private Media resolveIcon(UUID iconId) {
+        if (iconId == null) {
+            return null;
         }
 
-        Chat existingChat = getById(id);
-
-        chatRepository.delete(existingChat);
-    }
-
-    @Override
-    public boolean exists(UUID id) {
-        return chatRepository.existsById(id);
+        try {
+            return mediaService.getById(iconId);
+        } catch (Exception e) {
+            // Icon bulunamazsa null döner, sistem çökmez
+            return null;
+        }
     }
 }
