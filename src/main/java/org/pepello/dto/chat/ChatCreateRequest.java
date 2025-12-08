@@ -1,13 +1,12 @@
 package org.pepello.dto.chat;
 
 import org.pepello.common.request.BaseCreateRequest;
-import org.pepello.dto.media.DtoMedia;
 
 import java.util.UUID;
 
 public record ChatCreateRequest(
         UUID teamId,
-        DtoMedia icon,
+        UUID iconId,
         String chatName,
         String description
 ) implements BaseCreateRequest {

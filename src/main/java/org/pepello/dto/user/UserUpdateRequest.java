@@ -3,6 +3,7 @@ package org.pepello.dto.user;
 import org.pepello.common.request.BaseUpdateRequest;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 //Kullanıcı güncelleme için parametreler
 public record UserUpdateRequest(
@@ -10,7 +11,7 @@ public record UserUpdateRequest(
         String lastName,
         String email,
         String password,
-        String profilePicUrl,
+        UUID profilePicId,
         LocalDate birthday
 ) implements BaseUpdateRequest {
 }

@@ -1,95 +1,52 @@
 package org.pepello.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.pepello.common.service.BaseCrudService;
 import org.pepello.dto.role.RoleCreateRequest;
 import org.pepello.dto.role.RoleUpdateRequest;
 import org.pepello.entities.Role;
 import org.pepello.repository.RoleRepository;
 import org.pepello.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class RoleServiceImpl implements IRoleService {
+public class RoleServiceImpl extends BaseCrudService<Role, RoleCreateRequest, RoleUpdateRequest> implements IRoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Override
-    public List<Role> getAll() {
-        return roleRepository.findAll();
+    public RoleServiceImpl(JpaRepository<Role, UUID> repository) {
+        super(repository);
     }
 
     @Override
-    public Role getById(UUID id) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (id == null) {
-            throw new RuntimeException("ID null olamaz");
-        }
-        return roleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role bulunamadı: " + id));
-    }
-
-    @Override
-    public Role create(RoleCreateRequest createDto) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (createDto == null) {
-            throw new RuntimeException("CreateDto null olamaz");
-        }
-
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
+    protected Role buildEntity(RoleCreateRequest createDto) {
+        // Role name uniqueness kontrolü
         if (roleRepository.existsByRoleName(createDto.name())) {
             throw new RuntimeException("Bu isimde bir role zaten mevcut");
         }
 
-        Role newRole = Role.builder()
+        return Role.builder()
                 .roleName(createDto.name())
                 .roleDescription(createDto.description())
                 .build();
-
-        return roleRepository.save(newRole);
     }
 
     @Override
-    public Role update(UUID id, RoleUpdateRequest updateDto) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (id == null) {
-            throw new RuntimeException("ID null olamaz");
+    protected void updateEntity(Role existingEntity, RoleUpdateRequest updateDto) {
+        if (updateDto.name() != null) {
+            // Update sırasında da name uniqueness kontrolü
+            if (!existingEntity.getRoleName().equals(updateDto.name()) &&
+                    roleRepository.existsByRoleName(updateDto.name())) {
+                throw new RuntimeException("Bu isimde bir role zaten mevcut");
+            }
+            existingEntity.setRoleName(updateDto.name());
         }
-        if (updateDto == null) {
-            throw new RuntimeException("UpdateDto null olamaz");
-        }
-
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (updateDto.name() != null && roleRepository.existsByRoleName(updateDto.name())) {
-            throw new RuntimeException("Bu isimde bir role zaten mevcut");
-        }
-
-        Role existingRole = getById(id);
-
-        if (updateDto.name() != null) existingRole.setRoleName(updateDto.name());
-        if (updateDto.description() != null) existingRole.setRoleDescription(updateDto.description());
-
-        return roleRepository.save(existingRole);
-    }
-
-    @Override
-    public void delete(UUID id) {
-        // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
-        if (id == null) {
-            throw new RuntimeException("ID null olamaz");
-        }
-
-        Role existingRole = getById(id);
-
-        roleRepository.delete(existingRole);
-    }
-
-    @Override
-    public boolean exists(UUID id) {
-        return roleRepository.existsById(id);
+        if (updateDto.description() != null)
+            existingEntity.setRoleDescription(updateDto.description());
     }
 }

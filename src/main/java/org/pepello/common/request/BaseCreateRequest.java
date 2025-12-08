@@ -7,5 +7,5 @@ package org.pepello.common.request;
  * Örnek kullanım:
  * public record UserCreateRequest(String name, String email) implements BaseCreateRequest {}
  */
-public interface BaseCreateRequest {
+public interface BaseCreateRequest extends Request {
 }

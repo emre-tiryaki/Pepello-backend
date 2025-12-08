@@ -7,5 +7,5 @@ package org.pepello.common.request;
  * Örnek kullanım:
  * public record UserUpdateRequest(String name, String email) implements BaseUpdateRequest {}
  */
-public interface BaseUpdateRequest {
+public interface BaseUpdateRequest extends Request {
 }
