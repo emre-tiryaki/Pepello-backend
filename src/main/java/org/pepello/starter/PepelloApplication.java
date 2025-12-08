@@ -11,9 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = {"org.pepello"})
 @SpringBootApplication
 public class PepelloApplication {
-
     static void main(String[] args) {
         SpringApplication.run(PepelloApplication.class, args);
     }
-
 }
