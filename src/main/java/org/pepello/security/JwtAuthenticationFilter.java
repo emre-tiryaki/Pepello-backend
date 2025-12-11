@@ -33,8 +33,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = extractTokent(request);
 
+            System.out.println("JWT Filter - extracted token: " + (token == null ? "<null>" : token));
+
             if (token != null) {
                 UserDetails userDetails = authenticationService.validateToken(token);
+
+                if (userDetails == null) {
+                    System.out.println("JWT Filter - token validated but no user found");
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token: user not found");
+                    return;
+                }
+
+                System.out.println("JWT Filter - authenticated user: " + userDetails.getUsername() + ", authorities: " + userDetails.getAuthorities());
 
                 UsernamePasswordAuthenticationToken authenticationFilter = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -49,8 +59,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            //sadece kullanıcıyı doğrulamadık
-            System.out.println("Received invalid token");
+            System.out.println("JWT Filter - token validation failed: " + e.getClass().getSimpleName() + " -> " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
+            return;
         }
 
         filterChain.doFilter(request, response);

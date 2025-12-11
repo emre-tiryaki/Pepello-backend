@@ -62,7 +62,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         Claims claims = Jwts.parser()
                 .setSigningKey(getSignInKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
 
         return claims.getSubject();
