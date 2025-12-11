@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record TeamUpdateRequest(
         UUID owner,
-        DtoMedia icon,
+        UUID icon,
         String name,
         String description
 ) implements BaseUpdateRequest {

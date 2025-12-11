@@ -8,6 +8,8 @@ import org.pepello.dto.chat.ChatCreateRequest;
 import org.pepello.dto.chat.ChatUpdateRequest;
 import org.pepello.dto.chat.DtoChat;
 import org.pepello.entities.Chat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
