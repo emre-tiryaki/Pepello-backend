@@ -5,18 +5,20 @@ import org.pepello.common.controller.BaseCrudController;
 import org.pepello.common.mapper.BaseMapper;
 import org.pepello.common.service.BaseRelationService;
 import org.pepello.controller.ITeamController;
+import org.pepello.dto.project.DtoProject;
 import org.pepello.dto.relations.DtoRelation;
 import org.pepello.dto.relations.RelationCreateRequest;
 import org.pepello.dto.team.DtoTeam;
 import org.pepello.dto.team.TeamCreateRequest;
 import org.pepello.dto.team.TeamUpdateRequest;
 import org.pepello.dto.user.DtoUser;
-import org.pepello.entities.Team;
-import org.pepello.entities.User;
-import org.pepello.entities.UserTeamRelation;
+import org.pepello.entities.*;
+import org.pepello.mappers.ProjectMapper;
 import org.pepello.mappers.UserMapper;
 import org.pepello.service.ITeamService;
 import org.pepello.service.IUserService;
+import org.pepello.service.impl.TeamProjectRelationServiceImpl;
+import org.pepello.service.impl.UserTeamRelationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.parameters.P;
@@ -33,15 +35,18 @@ public class TeamControllerImpl extends BaseCrudController<Team, DtoTeam, TeamCr
     private IUserService userService;
     @Autowired
     private UserMapper userMapper;
-    private final BaseRelationService<User, Team, UserTeamRelation> userTeamRelationService;
+    @Autowired
+    private UserTeamRelationServiceImpl userTeamRelationService;
+    @Autowired
+    private TeamProjectRelationServiceImpl teamProjectRelationService;
+    @Autowired
+    private ProjectMapper projectMapper;
 
     public TeamControllerImpl(
             ICrud<Team, TeamCreateRequest, TeamUpdateRequest> service,
-            BaseMapper<Team, DtoTeam> mapper,
-            BaseRelationService<User, Team, UserTeamRelation> userTeamRelationService
+            BaseMapper<Team, DtoTeam> mapper
     ) {
         super(service, mapper);
-        this.userTeamRelationService = userTeamRelationService;
     }
 
     @GetMapping("/{teamId}/members")
@@ -65,6 +70,24 @@ public class TeamControllerImpl extends BaseCrudController<Team, DtoTeam, TeamCr
         userTeamRelationService.addRelation(userId, teamId);
 
         return new DtoRelation<>(userMapper.toDto(userService.getById(userId)), getById(request.id()));
+    }
+
+    @GetMapping("/{teamId}/projects")
+    public  List<DtoProject> getProjects(
+            @PathVariable UUID teamId
+    ) {
+        return teamProjectRelationService.getRelatedEntities(teamId)
+                .stream()
+                .map(projectMapper::toDto)
+                .toList();
+    }
+
+    @DeleteMapping("/{teamId}/members/{userId}")
+    public void deleteUserFromTeam(
+            @PathVariable UUID teamId,
+            @PathVariable UUID userId
+    ){
+        userTeamRelationService.removeRelation(userId, teamId);
     }
 
 }
