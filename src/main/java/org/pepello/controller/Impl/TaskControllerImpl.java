@@ -47,4 +47,28 @@ public class TaskControllerImpl extends BaseCrudController<Task, DtoTask, TaskCr
     ){
         taskAsigneeRelationService.addRelation(taskId, request.assignee());
     }
+
+    @DeleteMapping("/{taskId}/assign/{userId}")
+    public void deAssignFromTask(
+            @PathVariable UUID taskId,
+            @PathVariable UUID userId
+    ) {
+        taskAsigneeRelationService.removeRelation(taskId, userId);
+    }
+
+    @PatchMapping("/{taskId}/changeCompletion")
+    public void completeTask(
+            @PathVariable UUID taskId,
+            @RequestBody TaskCompletionRequest request
+    ) {
+        taskService.changeCompletion(taskId, request.completion());
+    }
+
+    @PostMapping("/{taskId}/attachment")
+    public void attachMediaToTask(
+            @PathVariable UUID taskId,
+            @RequestBody AttachMediaRequest request
+    ) {
+        taskService.attachMediaToTask(taskId, request.mediaId());
+    }
 }

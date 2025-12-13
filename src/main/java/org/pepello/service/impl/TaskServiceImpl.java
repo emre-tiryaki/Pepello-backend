@@ -3,9 +3,8 @@ package org.pepello.service.impl;
 import jakarta.transaction.Transactional;
 import org.pepello.common.service.BaseCrudService;
 import org.pepello.dto.events.TaskAssignedEvent;
-import org.pepello.dto.task.TaskCreateRequest;
-import org.pepello.dto.task.TaskStateChangeRequest;
-import org.pepello.dto.task.TaskUpdateRequest;
+import org.pepello.dto.task.*;
+import org.pepello.entities.Media;
 import org.pepello.entities.State;
 import org.pepello.entities.Task;
 import org.pepello.entities.User;
@@ -34,13 +33,11 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
     private UserServiceImpl userService;
     @Autowired
     private MediaServiceImpl mediaService;
-    private final TaskRepository taskRepository;
 
     private final List<ITaskObserver> observers = new ArrayList<>();
 
     public TaskServiceImpl(JpaRepository<Task, UUID> repository) {
         super(repository);
-        this.taskRepository = (TaskRepository) repository;
     }
 
     @Override
@@ -110,6 +107,29 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
 
         existingTask.setState(existingState);
 
-        return taskRepository.save(existingTask);
+        return repository.save(existingTask);
+    }
+
+    public void changeCompletion(UUID taskId, boolean completion) {
+        if (taskId == null)
+            throw new IllegalArgumentException("illegal argument Exception");
+
+        Task existingTask = getById(taskId);
+
+        existingTask.setIsFinished(completion);
+
+        repository.save(existingTask);
+    }
+
+    public void attachMediaToTask(UUID taskId, UUID mediaId) {
+        if (mediaId == null)
+            throw new IllegalArgumentException("illegal argument");
+
+        Media mediaToAttach = mediaService.getById(mediaId);
+        Task task = getById(taskId);
+
+        task.setMedia(mediaToAttach);
+
+        repository.save(task);
     }
 }
