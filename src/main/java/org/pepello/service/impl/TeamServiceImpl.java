@@ -46,10 +46,6 @@ public class TeamServiceImpl extends BaseCrudService<Team, TeamCreateRequest, Te
         this.observers.add(observer);
     }
 
-    public void removeObserver(ITeamObserver observer){
-        this.observers.remove(observer);
-    }
-
     private void notifyObservers(Team team, User owner){
         TeamCreatedEvent event = new TeamCreatedEvent(owner ,team);
         for (ITeamObserver observer : observers)

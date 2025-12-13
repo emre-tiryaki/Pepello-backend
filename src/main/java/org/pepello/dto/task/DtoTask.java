@@ -3,6 +3,7 @@ package org.pepello.dto.task;
 import org.pepello.dto.media.DtoMedia;
 import org.pepello.dto.project.DtoProject;
 import org.pepello.dto.state.DtoState;
+import org.pepello.dto.user.DtoUser;
 
 import java.util.UUID;
 

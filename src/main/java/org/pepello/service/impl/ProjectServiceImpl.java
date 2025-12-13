@@ -6,6 +6,7 @@ import org.pepello.dto.project.ProjectCreateRequest;
 import org.pepello.dto.project.ProjectUpdateRequest;
 import org.pepello.entities.Project;
 import org.pepello.service.IProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ import java.util.UUID;
 @Service
 @Transactional
 public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRequest, ProjectUpdateRequest> implements IProjectService {
+
+    @Autowired
+    private MediaServiceImpl mediaService;
 
     public ProjectServiceImpl(JpaRepository<Project, UUID> repository) {
         super(repository);
@@ -24,7 +28,7 @@ public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRe
         return Project.builder()
                 .projectName(createDto.projectName())
                 .projectDescription(createDto.projectDescription())
-                .icon(null) // icon şimdilik null - DTO'da DtoMedia var
+                .icon(mediaService.getById(createDto.icon()))
                 .startDate(createDto.startDate())
                 .endDate(createDto.endDate())
                 .build();
@@ -37,7 +41,7 @@ public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRe
         if (updateDto.projectDescription() != null)
             existingEntity.setProjectDescription(updateDto.projectDescription());
         if (updateDto.icon() != null)
-            existingEntity.setIcon(null); // icon update şimdilik null
+            existingEntity.setIcon(mediaService.getById(updateDto.icon()));
         if (updateDto.startDate() != null)
             existingEntity.setStartDate(updateDto.startDate());
         if (updateDto.endDate() != null)

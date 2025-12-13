@@ -6,6 +6,7 @@ import org.pepello.dto.state.StateCreateRequest;
 import org.pepello.dto.state.StateUpdateRequest;
 import org.pepello.entities.State;
 import org.pepello.service.IStateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ import java.util.UUID;
 @Service
 @Transactional
 public class StateServiceImpl extends BaseCrudService<State, StateCreateRequest, StateUpdateRequest> implements IStateService {
+
+    @Autowired
+    private MediaServiceImpl mediaService;
 
     public StateServiceImpl(JpaRepository<State, UUID> repository) {
         super(repository);
@@ -24,7 +28,7 @@ public class StateServiceImpl extends BaseCrudService<State, StateCreateRequest,
         return State.builder()
                 .stateName(createDto.stateName())
                 .stateColor(createDto.stateColor())
-                .icon(null) // icon şimdilik null
+                .icon(mediaService.getById(createDto.icon()))
                 .build();
     }
 
@@ -35,6 +39,6 @@ public class StateServiceImpl extends BaseCrudService<State, StateCreateRequest,
         if (updateDto.stateColor() != null)
             existingEntity.setStateColor(updateDto.stateColor());
         if (updateDto.icon() != null)
-            existingEntity.setIcon(null); // icon update şimdilik null
+            existingEntity.setIcon(mediaService.getById(updateDto.icon()));
     }
 }
