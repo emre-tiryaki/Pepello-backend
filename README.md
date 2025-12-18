@@ -29,7 +29,3 @@ Bu proje, Yazılım Tasarım dersi için geliştirilmiştir.
 ### 5- Builder Pattern
 - **Açıklama:** Karmaşık nesnelerin adım adım oluşturulmasını sağlar.
 - **Kullanım Yeri:** Entity sınıflarında (`Project`, `Task`, `State`, `Team` vb.) Lombok'un `@Builder` annotation'ı ile builder pattern kullanılır.  Bu sayede nesneler okunabilir ve esnek bir şekilde oluşturulabilir.
-
-### 6- Registry Pattern
-- **Açıklama:** Belirli nesnelerin merkezi bir yerden yönetilmesini ve erişilmesini sağlar. 
-- **Kullanım Yeri:** `ProjectTemplateRegistry`, proje oluşturulduğunda kullanılacak default state ve task template'lerini merkezi olarak tutar ve yönetir. 
