@@ -1,5 +1,6 @@
 package org.pepello.common.controller;
 
+import jakarta.validation.Valid;
 import org.pepello.common.ICrud;
 import org.pepello.common.request.BaseCreateRequest;
 import org.pepello.common.request.BaseUpdateRequest;
@@ -23,26 +24,26 @@ public interface ICrudEndpoints<D, C extends BaseCreateRequest, U extends BaseUp
 
     @GetMapping("/{id}")
     @Override
-    D getById(@PathVariable(name = "id") UUID id);
+    D getById(@PathVariable UUID id);
 
     @PostMapping("/new")
     @ResponseStatus(HttpStatus.CREATED)
     @Override
-    D create(@RequestBody C createDto);
+    D create(@Valid @RequestBody C createDto);
 
     @PatchMapping("/{id}")
     @Override
     D update(
-            @PathVariable(name = "id") UUID id,
-            @RequestBody U updateDto
+            @PathVariable UUID id,
+            @Valid @RequestBody U updateDto
     );
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @Override
-    void delete(@PathVariable(name = "id") UUID id);
+    void delete(@PathVariable UUID id);
 
     @GetMapping("/exists/{id}")
     @Override
-    boolean exists(@PathVariable(name = "id") UUID id);
+    boolean exists(@PathVariable UUID id);
 }

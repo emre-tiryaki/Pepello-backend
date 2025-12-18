@@ -49,7 +49,8 @@ public class ChatServiceImpl extends BaseCrudService<Chat, ChatCreateRequest, Ch
             existingEntity.setDescription(updateDto.description());
     }
 
-    private Media resolveIcon(UUID iconId) {
+    @Override
+    public Media resolveIcon(UUID iconId) {
         if (iconId == null) {
             return null;
         }

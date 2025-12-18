@@ -12,5 +12,5 @@ import java.time.OffsetDateTime;
 public abstract class CreatedEntity extends BaseEntity {
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    protected OffsetDateTime createdAt;
 }

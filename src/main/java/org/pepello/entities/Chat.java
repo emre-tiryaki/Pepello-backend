@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.pepello.common.baseEntities.UpdatedEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -26,4 +29,12 @@ public class Chat extends UpdatedEntity {
 
     @Column(name = "chat_description")
     private String description;
+
+    /**
+     * Chat'e ait mesajlar.
+     * cascade = ALL: Chat silinince mesajlar da silinir
+     * orphanRemoval = true: İlişki koparılınca mesaj silinir
+     */
+    @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Message> messages = new ArrayList<>();
 }

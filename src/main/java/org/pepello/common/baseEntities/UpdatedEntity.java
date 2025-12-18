@@ -12,5 +12,5 @@ import java.time.OffsetDateTime;
 public abstract class UpdatedEntity extends CreatedEntity {
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    protected OffsetDateTime updatedAt;
 }

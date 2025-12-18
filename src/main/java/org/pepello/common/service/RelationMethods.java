@@ -20,6 +20,13 @@ public interface RelationMethods<T, R, K> {
     K addRelation(UUID primaryId, UUID relatedId);
 
     /**
+     * ikinci ilişki ekleme metodu
+     *
+     * @param relation ilişki entity'si
+     */
+    K addRelation(K relation);
+
+    /**
      * ilişkiyi bulma metodu
      *
      * @param primaryId birincil entity id'si

@@ -3,6 +3,7 @@ package org.pepello.service.impl;
 import jakarta.transaction.Transactional;
 import org.pepello.common.service.BaseCrudService;
 import org.pepello.dto.user.UserCreateRequest;
+import org.pepello.dto.user.UserSearchRequest;
 import org.pepello.dto.user.UserUpdateRequest;
 import org.pepello.entities.User;
 import org.pepello.repository.UserRepository;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -69,5 +72,17 @@ public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, Us
             existingEntity.setProfilePic(mediaService.getById(updateDto.profilePicId()));
         if (updateDto.birthday() != null)
             existingEntity.setBirthday(updateDto.birthday());
+    }
+
+    public List<User> searchUser(UserSearchRequest request) {
+        if (request == null)
+            throw new IllegalArgumentException("request cannot be null");
+
+        List<User> userList = new ArrayList<>();
+
+        if (request.name() != null)
+            userList.addAll(userRepository.findByFullName(request.name().trim()));
+
+        return userList;
     }
 }

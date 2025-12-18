@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import org.pepello.common.service.BaseCrudService;
 import org.pepello.dto.message.MessageCreateRequest;
 import org.pepello.dto.message.MessageUpdateRequest;
+import org.pepello.entities.Chat;
 import org.pepello.entities.Message;
+import org.pepello.repository.MessageRepository;
 import org.pepello.service.IChatService;
 import org.pepello.service.IMediaService;
 import org.pepello.service.IMessageService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,9 +27,11 @@ public class MessageServiceImpl extends BaseCrudService<Message, MessageCreateRe
     private IMediaService mediaService;
     @Autowired
     private IUserService userService;
+    private final MessageRepository messageRepository;
 
     public MessageServiceImpl(JpaRepository<Message, UUID> repository) {
         super(repository);
+        this.messageRepository = (MessageRepository) repository;
     }
 
     @Override
@@ -61,5 +66,12 @@ public class MessageServiceImpl extends BaseCrudService<Message, MessageCreateRe
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Override
+    public List<Message> getChatMessages(UUID chatId) {
+        Chat chat = chatService.getById(chatId);
+
+        return messageRepository.findByChat(chat);
     }
 }
