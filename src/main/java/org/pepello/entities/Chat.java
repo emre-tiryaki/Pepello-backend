@@ -36,5 +36,6 @@ public class Chat extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca mesaj silinir
      */
     @OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Message> messages = new ArrayList<>();
 }

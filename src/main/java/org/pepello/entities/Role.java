@@ -34,6 +34,7 @@ public class Role extends CreatedEntity {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<RoleUserRelation> roleUserRelations = new ArrayList<>();
 
     /**
@@ -42,6 +43,7 @@ public class Role extends CreatedEntity {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<RoleTeamRelation> roleTeamRelations = new ArrayList<>();
 
 }

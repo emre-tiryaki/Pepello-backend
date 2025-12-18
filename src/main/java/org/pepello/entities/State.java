@@ -40,6 +40,7 @@ public class State extends UpdatedEntity implements Prototype<State> {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "state", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<ProjectStateRelation> projectStateRelations = new ArrayList<>();
 
     @Override

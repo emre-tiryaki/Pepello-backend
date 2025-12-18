@@ -65,7 +65,7 @@ public class AuthController {
             );
 
             // Kullanıcı oluştur
-            User user = userService.create(userCreateRequest);
+            userService.create(userCreateRequest);
 
             // Otomatik login yap
             UserDetails userDetails = authenticationService.authenticate(

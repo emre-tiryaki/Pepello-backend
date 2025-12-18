@@ -56,6 +56,7 @@ public class User extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca yorum silinir
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     /**
@@ -64,6 +65,7 @@ public class User extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca atama silinir
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<TaskAsigneeRelation> taskAssigneeRelations = new ArrayList<>();
 
     /**
@@ -72,6 +74,7 @@ public class User extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<UserTeamRelation> userTeamRelations = new ArrayList<>();
 
     /**
@@ -80,6 +83,7 @@ public class User extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<RoleUserRelation> roleUserRelations = new ArrayList<>();
 
 }

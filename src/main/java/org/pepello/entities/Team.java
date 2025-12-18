@@ -42,6 +42,7 @@ public class Team extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca chat silinir
      */
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Chat> chats = new ArrayList<>();
 
     /**
@@ -50,6 +51,7 @@ public class Team extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<UserTeamRelation> userTeamRelations = new ArrayList<>();
 
     /**
@@ -58,6 +60,7 @@ public class Team extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<RoleTeamRelation> roleTeamRelations = new ArrayList<>();
 
     /**
@@ -66,6 +69,7 @@ public class Team extends UpdatedEntity {
      * orphanRemoval = true: İlişki koparılınca relation silinir
      */
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<TeamProjectRelation> teamProjectRelations = new ArrayList<>();
 
 }

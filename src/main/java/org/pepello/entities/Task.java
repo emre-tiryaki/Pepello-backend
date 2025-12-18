@@ -44,6 +44,7 @@ public class Task extends UpdatedEntity implements Prototype<Task> {
 
     @ColumnDefault("false")
     @Column(name = "is_finished", nullable = false)
+    @Builder.Default
     private Boolean isFinished = false;
 
     /**
@@ -52,6 +53,7 @@ public class Task extends UpdatedEntity implements Prototype<Task> {
      * orphanRemoval = true: İlişki koparılınca atama silinir
      */
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<TaskAsigneeRelation> taskAssigneeRelations = new ArrayList<>();
 
     /**
@@ -60,6 +62,7 @@ public class Task extends UpdatedEntity implements Prototype<Task> {
      * orphanRemoval = true: İlişki koparılınca yorum silinir
      */
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Comment> comments = new ArrayList<>();
 
     @Override
