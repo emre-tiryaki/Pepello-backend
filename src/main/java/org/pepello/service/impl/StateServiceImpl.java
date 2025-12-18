@@ -28,7 +28,7 @@ public class StateServiceImpl extends BaseCrudService<State, StateCreateRequest,
         return State.builder()
                 .stateName(createDto.stateName())
                 .stateColor(createDto.stateColor())
-                .icon(mediaService.getById(createDto.icon()))
+                .icon(createDto.icon() != null ? mediaService.getById(createDto.icon()) : null)
                 .build();
     }
 

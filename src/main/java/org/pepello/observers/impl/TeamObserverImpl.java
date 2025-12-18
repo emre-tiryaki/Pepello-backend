@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TeamObserver implements ITeamObserver {
+public class TeamObserverImpl implements ITeamObserver {
     @Autowired
     private UserTeamRelationServiceImpl userTeamRelationService;
     @Autowired
     private TeamServiceImpl teamService;
 
     @PostConstruct
-    public void registerObserver(){
+    public void registerObserver() {
         System.out.println("TeamObserver kayıt edildi");
         teamService.addObserver(this);
     }

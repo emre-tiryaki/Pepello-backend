@@ -159,6 +159,12 @@ public abstract class BaseRelationService<P, R, REL> implements RelationMethods<
         return getRepository().save(relation);
     }
 
+    @Override
+    public REL addRelation(REL relation) {
+        return getRepository().save(relation);
+    }
+
+
     /**
      * iki id arası ilişkiyi döndürmek için metod
      *

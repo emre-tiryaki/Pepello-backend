@@ -8,6 +8,8 @@ import lombok.*;
 import org.pepello.common.baseEntities.UpdatedEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,5 +49,37 @@ public class User extends UpdatedEntity {
     @NotNull(message = "birthday cannot be null")
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
+
+    /**
+     * Kullanıcının yaptığı yorumlar.
+     * cascade = ALL: User silinince yorumlar da silinir
+     * orphanRemoval = true: İlişki koparılınca yorum silinir
+     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    /**
+     * Kullanıcıya atanmış task'lar (TaskAsigneeRelation).
+     * cascade = ALL: User silinince atamaları da sil
+     * orphanRemoval = true: İlişki koparılınca atama silinir
+     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskAsigneeRelation> taskAssigneeRelations = new ArrayList<>();
+
+    /**
+     * Kullanıcının üye olduğu team'ler (UserTeamRelation).
+     * cascade = ALL: User silinince team ilişkileri de silinir
+     * orphanRemoval = true: İlişki koparılınca relation silinir
+     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserTeamRelation> userTeamRelations = new ArrayList<>();
+
+    /**
+     * Kullanıcının rolleri (RoleUserRelation).
+     * cascade = ALL: User silinince rol ilişkileri de silinir
+     * orphanRemoval = true: İlişki koparılınca relation silinir
+     */
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoleUserRelation> roleUserRelations = new ArrayList<>();
 
 }

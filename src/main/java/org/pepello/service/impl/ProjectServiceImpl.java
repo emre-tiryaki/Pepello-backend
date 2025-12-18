@@ -1,10 +1,14 @@
 package org.pepello.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.pepello.common.observer.Observerable;
 import org.pepello.common.service.BaseCrudService;
+import org.pepello.dto.events.ProjectCreatedEvent;
 import org.pepello.dto.project.ProjectCreateRequest;
 import org.pepello.dto.project.ProjectUpdateRequest;
 import org.pepello.entities.Project;
+import org.pepello.observers.IProjectObserver;
+import org.pepello.common.observer.ObserverManager;
 import org.pepello.service.IProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,13 +18,33 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRequest, ProjectUpdateRequest> implements IProjectService {
-
+public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRequest, ProjectUpdateRequest> implements IProjectService, Observerable<IProjectObserver> {
     @Autowired
     private MediaServiceImpl mediaService;
 
+    private final ObserverManager<IProjectObserver> observerManager = new ObserverManager<>();
+
     public ProjectServiceImpl(JpaRepository<Project, UUID> repository) {
         super(repository);
+    }
+
+    @Override
+    public void addObserver(IProjectObserver observer) {
+        observerManager.addObserver(observer);
+    }
+
+    private void notifyObservers(Project project) {
+        ProjectCreatedEvent event = new ProjectCreatedEvent(project);
+        for (IProjectObserver observer : observerManager.getObservers()) {
+            observer.onProjectCreated(event);
+        }
+    }
+
+    @Override
+    public Project create(ProjectCreateRequest createDto) {
+        Project createdProject = super.create(createDto);
+        notifyObservers(createdProject);
+        return createdProject;
     }
 
     @Override
@@ -28,7 +52,7 @@ public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRe
         return Project.builder()
                 .projectName(createDto.projectName())
                 .projectDescription(createDto.projectDescription())
-                .icon(mediaService.getById(createDto.icon()))
+                .icon(createDto.icon() != null ? mediaService.getById(createDto.icon()) : null)
                 .startDate(createDto.startDate())
                 .endDate(createDto.endDate())
                 .build();

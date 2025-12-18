@@ -1,5 +1,6 @@
 package org.pepello.controller.Impl;
 
+import jakarta.validation.Valid;
 import org.pepello.common.ICrud;
 import org.pepello.common.controller.BaseCrudController;
 import org.pepello.common.mapper.BaseMapper;
@@ -7,8 +8,6 @@ import org.pepello.controller.ITaskController;
 import org.pepello.dto.task.*;
 import org.pepello.entities.Task;
 import org.pepello.mappers.TaskMapper;
-import org.pepello.service.ITaskAsigneeRelationService;
-import org.pepello.service.ITaskService;
 import org.pepello.service.impl.TaskAsigneeRelationServiceImpl;
 import org.pepello.service.impl.TaskServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,23 +31,26 @@ public class TaskControllerImpl extends BaseCrudController<Task, DtoTask, TaskCr
     }
 
     @PatchMapping("/{taskId}/move")
+    @Override
     public DtoTask changeTaskState(
             @PathVariable UUID taskId,
-            @RequestBody TaskStateChangeRequest request
-    ){
+            @Valid @RequestBody TaskStateChangeRequest request
+    ) {
         return taskMapper.toDto(taskService.changeTaskState(taskId, request));
     }
 
     @PostMapping("/{taskId}/assign")
     @ResponseStatus(HttpStatus.CREATED)
+    @Override
     public void assignToTask(
             @PathVariable UUID taskId,
-            @RequestBody AssignToTaskRequest request
-    ){
+            @Valid @RequestBody AssignToTaskRequest request
+    ) {
         taskAsigneeRelationService.addRelation(taskId, request.assignee());
     }
 
     @DeleteMapping("/{taskId}/assign/{userId}")
+    @Override
     public void deAssignFromTask(
             @PathVariable UUID taskId,
             @PathVariable UUID userId
@@ -57,17 +59,19 @@ public class TaskControllerImpl extends BaseCrudController<Task, DtoTask, TaskCr
     }
 
     @PatchMapping("/{taskId}/changeCompletion")
+    @Override
     public void completeTask(
             @PathVariable UUID taskId,
-            @RequestBody TaskCompletionRequest request
+            @Valid @RequestBody TaskCompletionRequest request
     ) {
         taskService.changeCompletion(taskId, request.completion());
     }
 
     @PostMapping("/{taskId}/attachment")
+    @Override
     public void attachMediaToTask(
             @PathVariable UUID taskId,
-            @RequestBody AttachMediaRequest request
+            @Valid @RequestBody AttachMediaRequest request
     ) {
         taskService.attachMediaToTask(taskId, request.mediaId());
     }

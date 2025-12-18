@@ -7,6 +7,8 @@ import lombok.*;
 import org.pepello.common.baseEntities.UpdatedEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,7 +30,7 @@ public class Project extends UpdatedEntity {
     private String projectDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "icon_id", nullable = false)
+    @JoinColumn(name = "icon_id")
     private Media icon;
 
     @Column(name = "start_date")
@@ -36,5 +38,11 @@ public class Project extends UpdatedEntity {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Task> tasks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectStateRelation> projectStateRelations = new ArrayList<>();
 
 }

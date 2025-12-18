@@ -35,6 +35,13 @@ public abstract class BaseCrudService<E, C extends BaseCreateRequest, U extends 
         return repository.save(newEntity);
     }
 
+    public E create(E entity) {
+        if (entity == null)
+            throw new IllegalArgumentException("entity cannot be null");
+
+        return repository.save(entity);
+    }
+
     @Override
     public E update(UUID id, U updateDto) {
         validateId(id);

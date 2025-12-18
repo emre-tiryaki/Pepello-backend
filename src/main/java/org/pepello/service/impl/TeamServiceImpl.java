@@ -1,6 +1,7 @@
 package org.pepello.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.pepello.common.observer.Observerable;
 import org.pepello.common.service.BaseCrudService;
 import org.pepello.dto.events.TeamCreatedEvent;
 import org.pepello.dto.team.TeamCreateRequest;
@@ -8,6 +9,7 @@ import org.pepello.dto.team.TeamUpdateRequest;
 import org.pepello.entities.Team;
 import org.pepello.entities.User;
 import org.pepello.observers.ITeamObserver;
+import org.pepello.common.observer.ObserverManager;
 import org.pepello.service.IMediaService;
 import org.pepello.service.ITeamService;
 import org.pepello.service.IUserService;
@@ -15,22 +17,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class TeamServiceImpl extends BaseCrudService<Team, TeamCreateRequest, TeamUpdateRequest> implements ITeamService {
+public class TeamServiceImpl extends BaseCrudService<Team, TeamCreateRequest, TeamUpdateRequest> implements ITeamService, Observerable<ITeamObserver> {
     @Autowired
     private IUserService userService;
     @Autowired
     private IMediaService mediaService;
 
-    private final List<ITeamObserver> observers = new ArrayList<>();
+    private final ObserverManager<ITeamObserver> observerManager = new ObserverManager<>();
 
     public TeamServiceImpl(JpaRepository<Team, UUID> repository) {
         super(repository);
+    }
+
+    @Override
+    public void addObserver(ITeamObserver observer) {
+        observerManager.addObserver(observer);
+    }
+
+    private void notifyObservers(Team team, User owner) {
+        TeamCreatedEvent event = new TeamCreatedEvent(owner, team);
+        for (ITeamObserver observer : observerManager.getObservers()) {
+            observer.onTeamCreated(event);
+        }
     }
 
     @Override
@@ -42,15 +54,6 @@ public class TeamServiceImpl extends BaseCrudService<Team, TeamCreateRequest, Te
         return createdTeam;
     }
 
-    public void addObserver(ITeamObserver observer){
-        this.observers.add(observer);
-    }
-
-    private void notifyObservers(Team team, User owner){
-        TeamCreatedEvent event = new TeamCreatedEvent(owner ,team);
-        for (ITeamObserver observer : observers)
-            observer.onTeamCreated(event);
-    }
 
     @Override
     protected Team buildEntity(TeamCreateRequest createDto) {

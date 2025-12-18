@@ -3,6 +3,7 @@ package org.pepello.service.impl;
 import org.pepello.common.ICrud;
 import org.pepello.common.repository.BaseRelationRepository;
 import org.pepello.common.service.BaseRelationService;
+import org.pepello.dto.state.StateCreateRequest;
 import org.pepello.entities.Project;
 import org.pepello.entities.ProjectStateRelation;
 import org.pepello.entities.State;
@@ -97,5 +98,18 @@ public class ProjectStateRelationServiceImpl extends BaseRelationService<Project
     @Override
     protected State extractRelated(ProjectStateRelation projectStateRelation) {
         return projectStateRelation.getState();
+    }
+
+    public State addStateToProject(UUID projectId, StateCreateRequest request) {
+        if (request == null)
+            throw new IllegalArgumentException("illegal argument");
+        if (!projectService.exists(projectId))
+            throw new RuntimeException("Project does not exists");
+
+        State newState = stateService.create(request);
+
+        addRelation(projectId, newState.getId());
+
+        return newState;
     }
 }

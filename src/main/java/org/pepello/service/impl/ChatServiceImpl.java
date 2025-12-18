@@ -6,7 +6,6 @@ import org.pepello.dto.chat.ChatCreateRequest;
 import org.pepello.dto.chat.ChatUpdateRequest;
 import org.pepello.entities.Chat;
 import org.pepello.entities.Media;
-import org.pepello.entities.Message;
 import org.pepello.service.IChatService;
 import org.pepello.service.IMediaService;
 import org.pepello.service.ITeamService;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,8 +22,6 @@ public class ChatServiceImpl extends BaseCrudService<Chat, ChatCreateRequest, Ch
     private ITeamService teamService;
     @Autowired
     private IMediaService mediaService;
-    @Autowired
-    private MessageServiceImpl messageService;
 
     public ChatServiceImpl(JpaRepository<Chat, UUID> repository) {
         super(repository);
@@ -53,7 +49,8 @@ public class ChatServiceImpl extends BaseCrudService<Chat, ChatCreateRequest, Ch
             existingEntity.setDescription(updateDto.description());
     }
 
-    private Media resolveIcon(UUID iconId) {
+    @Override
+    public Media resolveIcon(UUID iconId) {
         if (iconId == null) {
             return null;
         }
@@ -64,11 +61,5 @@ public class ChatServiceImpl extends BaseCrudService<Chat, ChatCreateRequest, Ch
             // Icon bulunamazsa null döner, sistem çökmez
             return null;
         }
-    }
-
-    public List<Message> getMessages(UUID chatId) {
-        Chat chat = getById(chatId);
-
-        return messageService.getChatMessages(chat);
     }
 }

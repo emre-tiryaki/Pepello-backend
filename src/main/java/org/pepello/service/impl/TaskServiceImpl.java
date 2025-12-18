@@ -1,14 +1,15 @@
 package org.pepello.service.impl;
 
 import jakarta.transaction.Transactional;
+import org.pepello.common.observer.Observerable;
 import org.pepello.common.service.BaseCrudService;
 import org.pepello.dto.events.TaskAssignedEvent;
-import org.pepello.dto.task.*;
-import org.pepello.entities.Media;
-import org.pepello.entities.State;
-import org.pepello.entities.Task;
-import org.pepello.entities.User;
+import org.pepello.dto.task.TaskCreateRequest;
+import org.pepello.dto.task.TaskStateChangeRequest;
+import org.pepello.dto.task.TaskUpdateRequest;
+import org.pepello.entities.*;
 import org.pepello.observers.ITaskObserver;
+import org.pepello.common.observer.ObserverManager;
 import org.pepello.repository.TaskRepository;
 import org.pepello.service.IProjectService;
 import org.pepello.service.IStateService;
@@ -18,13 +19,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, TaskUpdateRequest> implements ITaskService {
+public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, TaskUpdateRequest> implements ITaskService, Observerable<ITaskObserver> {
     @Autowired
     private IProjectService projectService;
     @Autowired
@@ -33,11 +33,25 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
     private UserServiceImpl userService;
     @Autowired
     private MediaServiceImpl mediaService;
+    private final TaskRepository taskRepository;
 
-    private final List<ITaskObserver> observers = new ArrayList<>();
+    private final ObserverManager<ITaskObserver> observerManager = new ObserverManager<>();
 
     public TaskServiceImpl(JpaRepository<Task, UUID> repository) {
         super(repository);
+        this.taskRepository = (TaskRepository) repository;
+    }
+
+    @Override
+    public void addObserver(ITaskObserver observer) {
+        observerManager.addObserver(observer);
+    }
+
+    private void notifyObservers(User assignee, Task task) {
+        TaskAssignedEvent event = new TaskAssignedEvent(assignee, task);
+        for (ITaskObserver observer : observerManager.getObservers()) {
+            observer.onAssign(event);
+        }
     }
 
     @Override
@@ -53,22 +67,12 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
         return newTask;
     }
 
-    public void addObserver(ITaskObserver observer){
-        this.observers.add(observer);
-    }
-
-    private void notifyObservers(User assignee, Task task){
-        TaskAssignedEvent event = new TaskAssignedEvent(assignee, task);
-        for (ITaskObserver observer : observers)
-            observer.onAssign(event);
-    }
-
     @Override
     protected Task buildEntity(TaskCreateRequest createDto) {
         return Task.builder()
                 .project(projectService.getById(createDto.projectId()))
                 .state(stateService.getById(createDto.stateId()))
-                .media(mediaService.getById(createDto.media()))
+                .media(createDto.media() != null ? mediaService.getById(createDto.media()) : null)
                 .taskTitle(createDto.taskTitle())
                 .taskDescription(createDto.taskDescription())
                 .isFinished(false)
@@ -77,8 +81,10 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
 
     @Override
     protected void updateEntity(Task existingEntity, TaskUpdateRequest updateDto) {
-        if (updateDto.projectId() != null)
-            existingEntity.setProject(projectService.getById(updateDto.projectId()));
+        if (updateDto.projectId() != null) {
+            Project project = projectService.getById(updateDto.projectId());
+            existingEntity.setProject(project);
+        }
         if (updateDto.stateId() != null)
             existingEntity.setState(stateService.getById(updateDto.stateId()));
         if (updateDto.media() != null)
@@ -93,6 +99,7 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
             existingEntity.setIsFinished(updateDto.isFinished());
     }
 
+    @Override
     public Task changeTaskState(UUID taskId, TaskStateChangeRequest request) {
         //TODO: hata mimarisi!!!!
         if (request == null)
@@ -110,6 +117,7 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
         return repository.save(existingTask);
     }
 
+    @Override
     public void changeCompletion(UUID taskId, boolean completion) {
         if (taskId == null)
             throw new IllegalArgumentException("illegal argument Exception");
@@ -121,6 +129,7 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
         repository.save(existingTask);
     }
 
+    @Override
     public void attachMediaToTask(UUID taskId, UUID mediaId) {
         if (mediaId == null)
             throw new IllegalArgumentException("illegal argument");
@@ -131,5 +140,10 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
         task.setMedia(mediaToAttach);
 
         repository.save(task);
+    }
+
+    @Override
+    public List<Task> getByProject(Project project) {
+        return taskRepository.findByProject(project);
     }
 }

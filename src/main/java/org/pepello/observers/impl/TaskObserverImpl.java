@@ -18,7 +18,7 @@ public class TaskObserverImpl implements ITaskObserver {
     private TaskServiceImpl taskService;
 
     @PostConstruct
-    public void registerObserver(){
+    public void registerObserver() {
         System.out.println("TaskObserver kayıt edildi");
         taskService.addObserver(this);
     }

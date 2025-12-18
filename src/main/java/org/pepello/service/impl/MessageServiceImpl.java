@@ -68,7 +68,10 @@ public class MessageServiceImpl extends BaseCrudService<Message, MessageCreateRe
         }
     }
 
-    public List<Message> getChatMessages(Chat chat) {
+    @Override
+    public List<Message> getChatMessages(UUID chatId) {
+        Chat chat = chatService.getById(chatId);
+
         return messageRepository.findByChat(chat);
     }
 }

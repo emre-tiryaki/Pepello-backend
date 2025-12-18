@@ -1,13 +1,13 @@
 package org.pepello.entities;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.pepello.common.baseEntities.CreatedEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,5 +27,21 @@ public class Role extends CreatedEntity {
     @NotBlank(message = "role description cannot be blank")
     @Column(name = "role_description")
     private String roleDescription;
+
+    /**
+     * Role'e atanmış kullanıcılar (RoleUserRelation).
+     * cascade = ALL: Role silinince kullanıcı ilişkileri de silinir
+     * orphanRemoval = true: İlişki koparılınca relation silinir
+     */
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoleUserRelation> roleUserRelations = new ArrayList<>();
+
+    /**
+     * Role'e atanmış team'ler (RoleTeamRelation).
+     * cascade = ALL: Role silinince team ilişkileri de silinir
+     * orphanRemoval = true: İlişki koparılınca relation silinir
+     */
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoleTeamRelation> roleTeamRelations = new ArrayList<>();
 
 }

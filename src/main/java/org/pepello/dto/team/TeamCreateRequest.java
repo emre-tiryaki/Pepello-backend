@@ -1,7 +1,6 @@
 package org.pepello.dto.team;
 
 import org.pepello.common.request.BaseCreateRequest;
-import org.pepello.dto.media.DtoMedia;
 
 import java.util.UUID;
 

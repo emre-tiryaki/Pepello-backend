@@ -1,5 +1,6 @@
 package org.pepello.controller.Impl;
 
+import jakarta.validation.Valid;
 import org.pepello.common.ICrud;
 import org.pepello.common.controller.BaseCrudController;
 import org.pepello.common.mapper.BaseMapper;
@@ -44,8 +45,9 @@ public class UserControllerImpl extends BaseCrudController<User, DtoUser, UserCr
     }
 
     @GetMapping("/me")
+    @Override
     public DtoUser getMe(
-            @RequestAttribute("userId")UUID userId
+            @RequestAttribute("userId") UUID userId
     ) {
         User user = service.getById(userId);
 
@@ -53,6 +55,7 @@ public class UserControllerImpl extends BaseCrudController<User, DtoUser, UserCr
     }
 
     @GetMapping("/{userId}/teams")
+    @Override
     public List<DtoTeam> getUsersTeams(
             @PathVariable UUID userId
     ) {
@@ -64,6 +67,7 @@ public class UserControllerImpl extends BaseCrudController<User, DtoUser, UserCr
     }
 
     @GetMapping("/{userId}/tasks")
+    @Override
     public List<DtoTask> getUsersTasks(
             @PathVariable UUID userId
     ) {
@@ -75,8 +79,9 @@ public class UserControllerImpl extends BaseCrudController<User, DtoUser, UserCr
     }
 
     @GetMapping("/search")
+    @Override
     public List<DtoUser> searchUser(
-            @RequestBody UserSearchRequest request
+            @Valid @RequestBody UserSearchRequest request
     ) {
         return userService.searchUser(request)
                 .stream()
