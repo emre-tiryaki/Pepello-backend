@@ -4,7 +4,6 @@ import org.pepello.dto.auth.AuthResponse;
 import org.pepello.dto.auth.LoginRequest;
 import org.pepello.dto.auth.RegisterRequest;
 import org.pepello.dto.user.UserCreateRequest;
-import org.pepello.entities.User;
 import org.pepello.service.IAuthenticationService;
 import org.pepello.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
