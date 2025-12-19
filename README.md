@@ -1,6 +1,7 @@
 # Pepello Backend
 
 Bu proje, Yazılım Tasarım dersi için geliştirilmiştir. 
+Proje Trello tarzı bir takım görev takip sistemidir.
 
 ## Proje Ekibi
 
