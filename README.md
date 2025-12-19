@@ -30,3 +30,7 @@ Proje Trello tarzı bir takım görev takip sistemidir.
 ### 5- Builder Pattern
 - **Açıklama:** Karmaşık nesnelerin adım adım oluşturulmasını sağlar.
 - **Kullanım Yeri:** Entity sınıflarında (`Project`, `Task`, `State`, `Team` vb.) Lombok'un `@Builder` annotation'ı ile builder pattern kullanılır.  Bu sayede nesneler okunabilir ve esnek bir şekilde oluşturulabilir.
+
+### 6- Factory Method
+- **Açıklama:** Bir metodun işinin alt sınıflarda tanımlanmasını ve bu sayede implemente edilen sınıfa özel bir metot yazılmış olması
+- **Kullanım Yeri:** `BaseCrudService` gibi soyut yaratıcılar `TaskServiceImpl` gibi sınıflar tarafından miras alınıp içi boş metotları doldurup kullanırlar.
