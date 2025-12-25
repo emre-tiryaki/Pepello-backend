@@ -54,17 +54,22 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // 1. İzin verilen adresler (Frontend adresini buraya yaz)
-        // localhost:3000 (React) veya localhost:5173 (Vite) hangisini kullanıyorsan
         configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
 
         // 2. İzin verilen HTTP metodları
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 
-        // 3. İzin verilen Header'lar (JWT kullandığın için Authorization şart)
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
+        // 3. Tüm header'lara izin ver
+        configuration.setAllowedHeaders(List.of("*"));
 
-        // 4. Kimlik bilgilerine (Cookie/Auth Header) izin ver
+        // 4. Response header'ları expose et
+        configuration.setExposedHeaders(List.of("*"));
+
+        // 5. Kimlik bilgilerine (Cookie/Auth Header) izin ver
         configuration.setAllowCredentials(true);
+
+        // 6. Preflight cache süresi
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Tüm endpointlere uygula
