@@ -15,11 +15,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @Transactional
-public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, UserUpdateRequest> implements IUserService {
+public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, UserUpdateRequest>
+        implements IUserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -84,5 +86,10 @@ public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, Us
             userList.addAll(userRepository.findByFullName(request.name().trim()));
 
         return userList;
+    }
+
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("email'e ait kulanıcı yok"));
     }
 }

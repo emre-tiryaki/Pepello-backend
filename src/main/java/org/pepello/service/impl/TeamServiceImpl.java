@@ -60,7 +60,7 @@ public class TeamServiceImpl extends BaseCrudService<Team, TeamCreateRequest, Te
         return Team.builder()
                 .owner(userService.getById(createDto.owner()))
                 .teamName(createDto.name())
-                .icon(mediaService.getById(createDto.icon()))
+                .icon(mediaService.getById(createDto.icon() == null ? null : createDto.icon()))
                 .description(createDto.description())
                 .build();
     }
