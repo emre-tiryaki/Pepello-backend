@@ -6,8 +6,8 @@ import org.pepello.entities.enums.Color;
 import java.util.UUID;
 
 public record StateCreateRequest(
-        String stateName,
-        UUID icon,
-        Color stateColor
-) implements BaseCreateRequest {
+                String stateName,
+                UUID icon,
+                Color stateColor,
+                UUID projectId) implements BaseCreateRequest {
 }

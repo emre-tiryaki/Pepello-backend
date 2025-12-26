@@ -18,14 +18,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ProjectStateRelationServiceImpl extends BaseRelationService<Project, State, ProjectStateRelation> implements IProjectStateRelationService {
+public class ProjectStateRelationServiceImpl extends BaseRelationService<Project, State, ProjectStateRelation>
+        implements IProjectStateRelationService {
     @Autowired
     private ProjectStateRelationRepository projectStateRelationRepository;
     @Autowired
     private IProjectService projectService;
     @Autowired
     private IStateService stateService;
-
 
     @Override
     protected BaseRelationRepository<ProjectStateRelation> getRepository() {
@@ -106,10 +106,12 @@ public class ProjectStateRelationServiceImpl extends BaseRelationService<Project
         if (!projectService.exists(projectId))
             throw new RuntimeException("Project does not exists");
 
-        State newState = stateService.create(request);
+        StateCreateRequest enriched = new StateCreateRequest(
+                request.stateName(),
+                request.icon(),
+                request.stateColor(),
+                projectId);
 
-        addRelation(projectId, newState.getId());
-
-        return newState;
+        return stateService.create(enriched);
     }
 }
