@@ -47,4 +47,13 @@ public class Project extends UpdatedEntity {
     @Builder.Default
     private List<ProjectStateRelation> projectStateRelations = new ArrayList<>();
 
+    /**
+     * Projenin takımları (TeamProjectRelation).
+     * cascade = ALL: Project silinince takım ilişkileri de silinir
+     * orphanRemoval = true: İlişki koparılınca relation silinir
+     */
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<TeamProjectRelation> teamProjectRelations = new ArrayList<>();
+
 }
