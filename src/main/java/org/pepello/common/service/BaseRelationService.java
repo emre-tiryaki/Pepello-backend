@@ -148,7 +148,7 @@ public abstract class BaseRelationService<P, R, REL> implements RelationMethods<
 
         // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
         if (existsRelation(primaryId, relatedId)) {
-            throw new RuntimeException("İlişki zaten mevcut");
+            throw new RuntimeException("İlişki zaten mevcut"); //BusinessException
         }
 
         P existingPrimaryEntity = getPrimaryService().getById(primaryId);
@@ -174,7 +174,7 @@ public abstract class BaseRelationService<P, R, REL> implements RelationMethods<
     public REL findRelation(UUID primaryId, UUID relatedId) {
         // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
         return findRelationOptional(primaryId, relatedId)
-                .orElseThrow(() -> new RuntimeException(
+                .orElseThrow(() -> new RuntimeException( //ValidationException
                         "İlişki bulunamadı - Primary ID: " + primaryId + ", Related ID: " + relatedId
                 ));
     }
@@ -318,7 +318,7 @@ public abstract class BaseRelationService<P, R, REL> implements RelationMethods<
     private void validateId(UUID id) {
         // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
         if (id == null) {
-            throw new RuntimeException("ID null olamaz");
+            throw new RuntimeException("ID null olamaz"); //ValidationException
         }
     }
 

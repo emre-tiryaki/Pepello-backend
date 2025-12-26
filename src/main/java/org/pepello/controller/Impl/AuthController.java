@@ -39,13 +39,13 @@ public class AuthController {
 
             return ResponseEntity.ok(new AuthResponse(token, 86400));
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED) //throw new ResourceNotFoundsException("USER_NOT_FOUND","KULLANICI BULUNAMADI");
                     .body(Map.of("error", "Kullanıcı bulunamadı"));
         } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED) //throw new BusinessException("INVALID_CREDENTIALS","EMAİL YA DA ŞİFRE HATALI");
                     .body(Map.of("error", "Email veya şifre hatalı"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)//throw new BusinessException("LOGIN_FAILED","GİRİŞ YAPILAMADI");
                     .body(Map.of("error", "Giriş yapılamadı"));
         }
     }
@@ -76,11 +76,11 @@ public class AuthController {
 
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new AuthResponse(token, 86400));
-        } catch (RuntimeException e) {
+        } catch (RuntimeException e) { //ValidationException ya da BusinessException
             // Email zaten kullanımda veya validation hatası
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", e.getMessage()));
-        } catch (Exception e) {
+        } catch (Exception e) { //throw new BusinessException("REGISTER_FAILED","KAYIT YAPILAMADI");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Kayıt yapılamadı"));
         }

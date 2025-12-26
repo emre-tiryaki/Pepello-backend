@@ -23,7 +23,7 @@ public abstract class BaseCrudService<E, C extends BaseCreateRequest, U extends 
     public E getById(UUID id) {
         validateId(id);
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Entity with ID " + id + " not found"));
+                .orElseThrow(() -> new RuntimeException("Entity with ID " + id + " not found"));  //ResourceNotFoundException
     }
 
     @Override
@@ -37,7 +37,7 @@ public abstract class BaseCrudService<E, C extends BaseCreateRequest, U extends 
 
     public E create(E entity) {
         if (entity == null)
-            throw new IllegalArgumentException("entity cannot be null");
+            throw new IllegalArgumentException("entity cannot be null"); //ValidationException
 
         return repository.save(entity);
     }
@@ -70,7 +70,7 @@ public abstract class BaseCrudService<E, C extends BaseCreateRequest, U extends 
 
     protected void validateId(UUID id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID cannot be null");
+            throw new IllegalArgumentException("ID cannot be null"); //ValidationException
         }
     }
 
