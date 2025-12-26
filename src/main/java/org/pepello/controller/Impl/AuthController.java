@@ -32,12 +32,14 @@ public class AuthController {
         try {
             UserDetails userDetails = authenticationService.authenticate(
                     loginRequest.email(),
-                    loginRequest.password()
-            );
+                    loginRequest.password());
 
             String token = authenticationService.generateToken(userDetails);
 
-            return ResponseEntity.ok(new AuthResponse(token, 86400));
+            // Retrieve userId by email
+            var user = userService.getByEmail(loginRequest.email());
+
+            return ResponseEntity.ok(new AuthResponse(token, 86400, user.getId()));
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("error", "Kullanıcı bulunamadı"));
@@ -60,8 +62,7 @@ public class AuthController {
                     registerRequest.email(),
                     registerRequest.password(),
                     null, // profilePicId
-                    registerRequest.birthday()
-            );
+                    registerRequest.birthday());
 
             // Kullanıcı oluştur
             userService.create(userCreateRequest);
@@ -69,13 +70,15 @@ public class AuthController {
             // Otomatik login yap
             UserDetails userDetails = authenticationService.authenticate(
                     registerRequest.email(),
-                    registerRequest.password()
-            );
+                    registerRequest.password());
 
             String token = authenticationService.generateToken(userDetails);
 
+            // Retrieve userId by email
+            var user = userService.getByEmail(registerRequest.email());
+
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new AuthResponse(token, 86400));
+                    .body(new AuthResponse(token, 86400, user.getId()));
         } catch (RuntimeException e) {
             // Email zaten kullanımda veya validation hatası
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)

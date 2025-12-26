@@ -9,5 +9,6 @@ public record StateCreateRequest(
                 String stateName,
                 UUID icon,
                 Color stateColor,
-                UUID projectId) implements BaseCreateRequest {
+                UUID projectId
+        ) implements BaseCreateRequest {
 }

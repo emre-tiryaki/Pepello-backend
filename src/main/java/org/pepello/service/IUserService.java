@@ -6,4 +6,5 @@ import org.pepello.dto.user.UserUpdateRequest;
 import org.pepello.entities.User;
 
 public interface IUserService extends ICrud<User, UserCreateRequest, UserUpdateRequest> {
+    User getByEmail(String email);
 }
