@@ -9,6 +9,7 @@ import org.pepello.service.impl.ProjectServiceImpl;
 import org.pepello.service.impl.ProjectStateRelationServiceImpl;
 import org.pepello.service.impl.StateServiceImpl;
 import org.pepello.service.impl.TaskServiceImpl;
+import org.pepello.service.impl.TeamProjectRelationServiceImpl;
 import org.pepello.service.template.ProjectTemplateRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,8 @@ public class ProjectObserverImpl implements IProjectObserver {
     private ProjectStateRelationServiceImpl projectStateRelationService;
     @Autowired
     private TaskServiceImpl taskService;
+    @Autowired
+    private TeamProjectRelationServiceImpl teamProjectRelationServiceImpl;
 
     @PostConstruct
     public void registerObserver() {
@@ -45,12 +48,12 @@ public class ProjectObserverImpl implements IProjectObserver {
         for (State state : states) {
             State savedState = stateService.create(state);
 
-            if (firstState == null) firstState = savedState;
+            if (firstState == null)
+                firstState = savedState;
 
             projectStateRelationService.addRelation(
                     event.createdProject().getId(),
-                    savedState.getId()
-            );
+                    savedState.getId());
         }
 
         if (firstState != null) {
@@ -60,5 +63,9 @@ public class ProjectObserverImpl implements IProjectObserver {
                 taskService.create(task);
             }
         }
+        // Team-Project ilişkisini oluştur
+        teamProjectRelationServiceImpl.addRelation(
+                event.teamId(),
+                event.createdProject().getId());
     }
 }

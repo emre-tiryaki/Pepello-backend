@@ -18,7 +18,8 @@ import java.util.UUID;
 
 @Service
 @Transactional
-public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRequest, ProjectUpdateRequest> implements IProjectService, Observerable<IProjectObserver> {
+public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRequest, ProjectUpdateRequest>
+        implements IProjectService, Observerable<IProjectObserver> {
     @Autowired
     private MediaServiceImpl mediaService;
 
@@ -33,8 +34,8 @@ public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRe
         observerManager.addObserver(observer);
     }
 
-    private void notifyObservers(Project project) {
-        ProjectCreatedEvent event = new ProjectCreatedEvent(project);
+    private void notifyObservers(Project project, UUID teamId) {
+        ProjectCreatedEvent event = new ProjectCreatedEvent(project, teamId);
         for (IProjectObserver observer : observerManager.getObservers()) {
             observer.onProjectCreated(event);
         }
@@ -43,7 +44,9 @@ public class ProjectServiceImpl extends BaseCrudService<Project, ProjectCreateRe
     @Override
     public Project create(ProjectCreateRequest createDto) {
         Project createdProject = super.create(createDto);
-        notifyObservers(createdProject);
+
+        notifyObservers(createdProject, createDto.teamId());
+
         return createdProject;
     }
 
