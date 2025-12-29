@@ -2,8 +2,10 @@ package org.pepello.common.service;
 
 import jakarta.transaction.Transactional;
 import org.pepello.common.ICrud;
+import org.pepello.common.exception.business.BusinessException;
 import org.pepello.common.repository.BaseRelationRepository;
-
+import org.pepello.common.exception.validation.ValidationException;
+import org.pepello.common.exception.notfound.RelationNotFoundException;
 import java.util.List;
 import java.util.UUID;
 
@@ -148,7 +150,7 @@ public abstract class BaseRelationService<P, R, REL> implements RelationMethods<
 
         // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
         if (existsRelation(primaryId, relatedId)) {
-            throw new RuntimeException("İlişki zaten mevcut"); //BusinessException
+            throw new BusinessException("İlişki zaten mevcut"); //BusinessException
         }
 
         P existingPrimaryEntity = getPrimaryService().getById(primaryId);
@@ -174,9 +176,10 @@ public abstract class BaseRelationService<P, R, REL> implements RelationMethods<
     public REL findRelation(UUID primaryId, UUID relatedId) {
         // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
         return findRelationOptional(primaryId, relatedId)
-                .orElseThrow(() -> new RuntimeException( //ValidationException
-                        "İlişki bulunamadı - Primary ID: " + primaryId + ", Related ID: " + relatedId
-                ));
+                .orElseThrow(() ->
+                        new RelationNotFoundException(primaryId, relatedId)
+                );
+
     }
 
     /**
@@ -318,7 +321,7 @@ public abstract class BaseRelationService<P, R, REL> implements RelationMethods<
     private void validateId(UUID id) {
         // TODO: Daha iyi bir hata mimarisi yapınca değiştirilecek
         if (id == null) {
-            throw new RuntimeException("ID null olamaz"); //ValidationException
+            throw new ValidationException("ID null olamaz"); //ValidationException
         }
     }
 

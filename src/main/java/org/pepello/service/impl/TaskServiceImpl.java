@@ -17,6 +17,9 @@ import org.pepello.service.ITaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.pepello.common.exception.business.BusinessException;
+import org.pepello.common.exception.validation.ValidationException;
+
 
 import java.security.InvalidParameterException;
 import java.util.List;
@@ -103,14 +106,14 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
     public Task changeTaskState(UUID taskId, TaskStateChangeRequest request) {
         //TODO: hata mimarisi!!!!
         if (request == null)
-            throw new InvalidParameterException("Parameter is wrong");
+            throw new ValidationException("Parameter is wrong");
 
         Task existingTask = getById(taskId);
         State existingState = stateService.getById(request.newStateId());
 
         //TODO: hata mimarisi!!!!
         if (existingTask.getState().equals(existingState))
-            throw new RuntimeException("cannot change to same state");
+            throw new BusinessException("cannot change to same state");
 
         existingTask.setState(existingState);
 
@@ -120,7 +123,7 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
     @Override
     public void changeCompletion(UUID taskId, boolean completion) {
         if (taskId == null)
-            throw new IllegalArgumentException("illegal argument Exception");
+            throw new ValidationException("Task id can not be null");
 
         Task existingTask = getById(taskId);
 
@@ -132,7 +135,7 @@ public class TaskServiceImpl extends BaseCrudService<Task, TaskCreateRequest, Ta
     @Override
     public void attachMediaToTask(UUID taskId, UUID mediaId) {
         if (mediaId == null)
-            throw new IllegalArgumentException("illegal argument");
+            throw new ValidationException("media can not be null");
 
         Media mediaToAttach = mediaService.getById(mediaId);
         Task task = getById(taskId);

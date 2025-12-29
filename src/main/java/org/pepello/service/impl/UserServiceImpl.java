@@ -12,6 +12,10 @@ import org.pepello.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.pepello.common.exception.business.BusinessException;
+import org.pepello.common.exception.notfound.ResourceNotFoundException;
+import org.pepello.common.exception.validation.ValidationException;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +41,11 @@ public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, Us
         // Validation
         if (createDto.email() == null || createDto.password() == null ||
                 createDto.firstName() == null || createDto.lastName() == null) {
-            throw new RuntimeException("Gerekli alanlar eksik");
+            throw new ValidationException("Gerekli alanlar eksik");
         }
 
         if (userRepository.existsByEmail(createDto.email())) {
-            throw new RuntimeException("Bu email zaten kullanılıyor");
+            throw new BusinessException("Bu email zaten kullanılıyor");
         }
 
         return User.builder()
@@ -63,7 +67,7 @@ public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, Us
         if (updateDto.email() != null) {
             if (!existingEntity.getEmail().equals(updateDto.email()) &&
                     userRepository.existsByEmail(updateDto.email())) {
-                throw new RuntimeException("Bu email zaten kullanılıyor");
+                throw new BusinessException("Bu email zaten kullanılıyor");
             }
             existingEntity.setEmail(updateDto.email());
         }
@@ -77,7 +81,7 @@ public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, Us
 
     public List<User> searchUser(UserSearchRequest request) {
         if (request == null)
-            throw new IllegalArgumentException("request cannot be null");
+            throw new ValidationException("request cannot be null");
 
         List<User> userList = new ArrayList<>();
 
@@ -89,6 +93,6 @@ public class UserServiceImpl extends BaseCrudService<User, UserCreateRequest, Us
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("email'e ait kulanıcı yok"));
+                .orElseThrow(() -> new ResourceNotFoundException("email'e ait kulanıcı yok"));
     }
 }

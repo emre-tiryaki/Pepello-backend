@@ -13,6 +13,10 @@ import org.pepello.service.IProjectStateRelationService;
 import org.pepello.service.IStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.pepello.common.exception.business.BusinessException;
+import org.pepello.common.exception.notfound.ResourceNotFoundException;
+import org.pepello.common.exception.validation.ValidationException;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -102,9 +106,9 @@ public class ProjectStateRelationServiceImpl extends BaseRelationService<Project
 
     public State addStateToProject(UUID projectId, StateCreateRequest request) {
         if (request == null)
-            throw new IllegalArgumentException("illegal argument");
+            throw new ValidationException("projectId can not be null");
         if (!projectService.exists(projectId))
-            throw new RuntimeException("Project does not exists");
+            throw new ValidationException("State create request can not be null");
 
         StateCreateRequest enriched = new StateCreateRequest(
                 request.stateName(),

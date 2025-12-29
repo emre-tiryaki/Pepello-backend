@@ -6,6 +6,9 @@ import org.pepello.common.request.BaseCreateRequest;
 import org.pepello.common.request.BaseUpdateRequest;
 import org.pepello.common.request.Request;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.pepello.common.exception.notfound.ResourceNotFoundException;
+import org.pepello.common.exception.validation.ValidationException;
+
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +26,12 @@ public abstract class BaseCrudService<E, C extends BaseCreateRequest, U extends 
     public E getById(UUID id) {
         validateId(id);
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Entity with ID " + id + " not found"));  //ResourceNotFoundException
+                .orElseThrow(() -> new ResourceNotFoundException(
+                                "Entity",
+                                "id",
+                                id
+                        )
+                );  //ResourceNotFoundException
     }
 
     @Override
@@ -37,7 +45,7 @@ public abstract class BaseCrudService<E, C extends BaseCreateRequest, U extends 
 
     public E create(E entity) {
         if (entity == null)
-            throw new IllegalArgumentException("entity cannot be null"); //ValidationException
+            throw new ValidationException("entity cannot be null"); //ValidationException
 
         return repository.save(entity);
     }
@@ -70,13 +78,13 @@ public abstract class BaseCrudService<E, C extends BaseCreateRequest, U extends 
 
     protected void validateId(UUID id) {
         if (id == null) {
-            throw new IllegalArgumentException("ID cannot be null"); //ValidationException
+            throw new ValidationException("ID cannot be null"); //ValidationException
         }
     }
 
     protected void validateRequest(Request request) {
         if (request == null)
-            throw new IllegalArgumentException("Request cannot be null");
+            throw new ValidationException("Request cannot be null");
     }
 
     protected abstract E buildEntity(C createDto);

@@ -10,6 +10,8 @@ import org.pepello.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.pepello.common.exception.business.BusinessException;
+
 
 import java.util.UUID;
 
@@ -27,7 +29,7 @@ public class RoleServiceImpl extends BaseCrudService<Role, RoleCreateRequest, Ro
     protected Role buildEntity(RoleCreateRequest createDto) {
         // Role name uniqueness kontrolü
         if (roleRepository.existsByRoleName(createDto.name())) {
-            throw new RuntimeException("Bu isimde bir role zaten mevcut");
+            throw new BusinessException("Bu isimde bir role zaten mevcut");
         }
 
         return Role.builder()
@@ -42,7 +44,7 @@ public class RoleServiceImpl extends BaseCrudService<Role, RoleCreateRequest, Ro
             // Update sırasında da name uniqueness kontrolü
             if (!existingEntity.getRoleName().equals(updateDto.name()) &&
                     roleRepository.existsByRoleName(updateDto.name())) {
-                throw new RuntimeException("Bu isimde bir role zaten mevcut");
+                throw new BusinessException("Bu isimde bir role zaten mevcut");
             }
             existingEntity.setRoleName(updateDto.name());
         }
